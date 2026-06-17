@@ -1,0 +1,138 @@
+<div class="admin-header-actions mb-2">
+  <h1 class="page-title">Manage Services</h1>
+  <button class="btn btn-primary" (click)="openAddModal()">+ Add New Service</button>
+</div>
+
+<div class="admin-table-container">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Banner</th>
+        <th>Title</th>
+        <th>Icon</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (service of services; track service.id) {
+        <tr>
+          <td>
+            @if (service.image) {
+              <img [src]="service.image" class="table-thumb" alt="Banner">
+            } @else {
+              <span class="text-muted" style="font-size: 0.85rem;">No Image</span>
+            }
+          </td>
+          <td style="font-weight: 600;">{{ service.title }}</td>
+          <td><i [class]="service.icon" style="font-size: 1.5rem; color: var(--accent-gold);"></i></td>
+          <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ service.description }}</td>
+          <td class="action-cell">
+            <button class="btn-icon text-primary" (click)="openEditModal(service)" title="Edit Service">✏️</button>
+            <button class="btn-icon text-danger" (click)="deleteService(service.id)" title="Delete Service">🗑️</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- Add/Edit Modal -->
+@if (isEditing) {
+  <div class="modal-backdrop">
+    <div class="modal-content modal-content-lg">
+      <div class="modal-header">
+        <h3>{{ currentService.id && currentService.title ? 'Edit Service' : 'Add New Service' }}</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      
+      <form (ngSubmit)="saveService()" #serviceForm="ngForm" class="modal-body">
+        <div class="form-grid">
+          <div class="form-group form-group-full">
+            <label>Title</label>
+            <input type="text" name="title" [(ngModel)]="currentService.title" required class="form-control" placeholder="e.g. Building Construction">
+          </div>
+          
+          <div class="form-group">
+            <label>Icon CSS Class (e.g. icon-building)</label>
+            <input type="text" name="icon" [(ngModel)]="currentService.icon" required class="form-control" placeholder="e.g. icon-building">
+          </div>
+
+          <div class="form-group">
+            <label>Icon Preview</label>
+            <div style="padding: 0.85rem; background-color: #1e2538; border: 1px solid #2d3748; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;">
+              <i [class]="currentService.icon" style="font-size: 1.5rem; color: var(--accent-gold);"></i>
+            </div>
+          </div>
+
+          <div class="form-group form-group-full">
+            <label>Banner Picture</label>
+            <div class="image-upload-wrapper">
+              <span class="upload-icon">🖼️</span>
+              <span class="upload-text">Click to <strong>browse</strong> or upload banner image</span>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+            @if (currentService.image) {
+              <div class="image-previews">
+                <div class="preview-item" style="width: 180px; height: 90px;">
+                  <img [src]="currentService.image" class="preview-img" alt="Preview">
+                </div>
+              </div>
+            }
+          </div>
+          
+          <div class="form-group form-group-full">
+            <label>Description</label>
+            <textarea name="description" [(ngModel)]="currentService.description" required class="form-control" rows="4" placeholder="Detail the core offering, scope of service, and business process..."></textarea>
+          </div>
+
+          <div class="form-group form-group-full">
+            <label>Key Benefits (comma separated)</label>
+            <input type="text" name="benefits" [(ngModel)]="benefitsAsString" required class="form-control" placeholder="e.g. Structural Integrity, Customized Solutions, Timely Completion">
+          </div>
+        </div>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #1f293d;">
+        
+        <h4 style="margin-bottom: 1.5rem; color: #ffffff;">Working Process</h4>
+        @for (step of currentService.process; track $index) {
+          <div class="form-grid" style="background: #1e2538; padding: 1.5rem; border: 1px solid #1f293d; border-radius: 6px; margin-bottom: 1.5rem; position: relative;">
+            <button type="button" class="close-btn" style="position: absolute; right: 15px; top: 10px; font-size: 1.2rem;" (click)="removeProcessStep($index)" title="Remove Step">&times;</button>
+            <div class="form-group">
+              <label>Step {{ $index + 1 }} Title</label>
+              <input type="text" [name]="'stepTitle'+$index" [(ngModel)]="step.title" required class="form-control" placeholder="e.g. Consultation">
+            </div>
+            <div class="form-group">
+              <label>Step {{ $index + 1 }} Description</label>
+              <input type="text" [name]="'stepDesc'+$index" [(ngModel)]="step.description" required class="form-control" placeholder="e.g. Meet to discuss plans...">
+            </div>
+          </div>
+        }
+        <button type="button" class="btn btn-sm btn-secondary mb-2" (click)="addProcessStep()">+ Add Step</button>
+
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid #1f293d;">
+
+        <h4 style="margin-bottom: 1.5rem; color: #ffffff;">Frequently Asked Questions</h4>
+        @for (faq of currentService.faqs; track $index) {
+          <div class="form-grid" style="background: #1e2538; padding: 1.5rem; border: 1px solid #1f293d; border-radius: 6px; margin-bottom: 1.5rem; position: relative;">
+            <button type="button" class="close-btn" style="position: absolute; right: 15px; top: 10px; font-size: 1.2rem;" (click)="removeFaq($index)" title="Remove FAQ">&times;</button>
+            <div class="form-group form-group-full">
+              <label>Question {{ $index + 1 }}</label>
+              <input type="text" [name]="'faqQ'+$index" [(ngModel)]="faq.question" required class="form-control" placeholder="e.g. Do you handle permits?">
+            </div>
+            <div class="form-group form-group-full">
+              <label>Answer {{ $index + 1 }}</label>
+              <textarea [name]="'faqA'+$index" [(ngModel)]="faq.answer" required class="form-control" rows="3" placeholder="Provide a helpful response..."></textarea>
+            </div>
+          </div>
+        }
+        <button type="button" class="btn btn-sm btn-secondary" (click)="addFaq()">+ Add FAQ</button>
+        
+        <div class="modal-footer mt-2">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!serviceForm.form.valid">Save Service</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

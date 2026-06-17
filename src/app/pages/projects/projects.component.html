@@ -1,0 +1,27 @@
+<section class="page-header" style="background-color: var(--bg-dark);">
+  <div class="container text-center">
+    <h1 class="page-title">Our Projects</h1>
+    <p class="page-breadcrumb"><a routerLink="/">Home</a> / Projects</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="project-filters">
+      @for (category of categories; track category) {
+        <button 
+          class="filter-btn" 
+          [class.active]="activeCategory === category"
+          (click)="setCategory(category)">
+          {{ category }}
+        </button>
+      }
+    </div>
+
+    <div class="projects-grid mt-2">
+      @for (project of filteredProjects; track project.id) {
+        <app-project-card [project]="project"></app-project-card>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,165 @@
+.page-header {
+  height: 350px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+}
+
+.header-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2.5rem;
+  color: var(--bg-dark);
+}
+
+.page-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.page-breadcrumb a {
+  color: var(--text-muted);
+}
+
+.page-breadcrumb a:hover {
+  color: var(--accent-orange);
+}
+
+.gold-text {
+  color: var(--accent-gold);
+  font-family: var(--font-heading);
+}
+
+.benefits-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-left: 4px solid var(--accent-gold);
+}
+
+.benefits-list {
+  padding: 0;
+}
+
+.benefits-list li {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+}
+
+.benefits-list li i {
+  color: var(--accent-orange);
+}
+
+.process-container, .faq-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.process-timeline {
+  margin-top: 1.5rem;
+}
+
+.process-step {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.process-step:last-child {
+  margin-bottom: 0;
+}
+
+.process-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  bottom: -20px;
+  width: 2px;
+  background-color: #eee;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-dark);
+  color: var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.step-content h4 {
+  margin-bottom: 0.2rem;
+  color: var(--text-dark);
+}
+
+.step-content p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.faq-accordion {
+  margin-top: 1.5rem;
+}
+
+.faq-item {
+  border-bottom: 1px solid #eee;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  padding: 1.2rem 0;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-dark);
+  transition: color 0.3s ease;
+}
+
+.faq-question:hover {
+  color: var(--accent-orange);
+}
+
+.faq-item.active .faq-question {
+  color: var(--accent-orange);
+}
+
+.faq-icon {
+  font-size: 1.5rem;
+  color: var(--accent-gold);
+}
+
+.faq-answer {
+  padding-bottom: 1.2rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}

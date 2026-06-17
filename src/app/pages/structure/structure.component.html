@@ -1,0 +1,31 @@
+<section class="page-header" style="background-color: var(--bg-dark);">
+  <div class="container text-center">
+    <h1 class="page-title">Company Structure</h1>
+    <p class="page-breadcrumb"><a routerLink="/">Home</a> / Company Structure</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="intro-text text-center mb-2">
+      <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+        Meet the dedicated team behind Aeternus Works Construction. Our experienced professionals ensure every project is built for eternity.
+      </p>
+    </div>
+
+    <div class="grid grid-3">
+      @for (member of team; track member.id) {
+        <div class="team-card">
+          <div class="team-img-wrapper">
+            <img [src]="member.image || 'https://via.placeholder.com/300'" [alt]="member.name" class="team-img">
+            <div class="team-role">{{ member.role }}</div>
+          </div>
+          <div class="team-content">
+            <h3 class="team-name">{{ member.name }}</h3>
+            <p class="team-desc">{{ member.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

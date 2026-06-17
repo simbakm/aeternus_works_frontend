@@ -1,0 +1,74 @@
+<div class="dashboard-header mb-2">
+  <h1 class="page-title">Dashboard Overview</h1>
+  <p>Welcome to the Aeternus Works Admin Dashboard.</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="dashboard-cards mb-3">
+  <a routerLink="/admin/projects" class="dash-card">
+    <div class="dash-card-icon">🏗️</div>
+    <div class="dash-card-info">
+      <h3>All Projects</h3>
+      <div class="dash-card-number">{{ totalProjects }}</div>
+    </div>
+  </a>
+
+  <a routerLink="/admin/projects" class="dash-card">
+    <div class="dash-card-icon text-success">✓</div>
+    <div class="dash-card-info">
+      <h3>Completed</h3>
+      <div class="dash-card-number text-success">{{ completedProjects }}</div>
+    </div>
+  </a>
+
+  <a routerLink="/admin/projects" class="dash-card">
+    <div class="dash-card-icon text-warning">◎</div>
+    <div class="dash-card-info">
+      <h3>Ongoing</h3>
+      <div class="dash-card-number text-warning">{{ ongoingProjects }}</div>
+    </div>
+  </a>
+</div>
+
+<!-- Charts Area -->
+@if (isBrowser) {
+  <div class="charts-grid">
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Site Traffic (Views)</h3>
+        <select class="chart-filter">
+          <option>This Week</option>
+          <option>This Month</option>
+          <option>This Year</option>
+        </select>
+      </div>
+      <div class="chart-wrapper">
+        <canvas baseChart
+          [data]="lineChartData"
+          [options]="lineChartOptions"
+          [type]="'line'">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Customer Inquiries</h3>
+        <select class="chart-filter">
+          <option>This Week</option>
+          <option>This Month</option>
+          <option>This Year</option>
+        </select>
+      </div>
+      <div class="chart-wrapper">
+        <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+  </div>
+} @else {
+  <p>Loading charts...</p>
+}

@@ -1,0 +1,61 @@
+.page-header {
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.page-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.page-breadcrumb a {
+  color: var(--text-muted);
+}
+
+.page-breadcrumb a:hover {
+  color: var(--accent-orange);
+}
+
+.project-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1.5rem;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.filter-btn:hover {
+  color: var(--text-dark);
+}
+
+.filter-btn.active {
+  color: var(--text-dark);
+}
+
+.filter-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -25px; /* align with the border-bottom of .project-filters */
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--accent-gold);
+}

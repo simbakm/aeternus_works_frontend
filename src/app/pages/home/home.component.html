@@ -1,0 +1,83 @@
+<section class="hero" style="background-image: linear-gradient(rgba(17, 17, 17, 0.78), rgba(17, 17, 17, 0.78)), url('harare.png');">
+  <div class="container hero-content">
+    <h1 class="hero-title">Constructing Homes With Pride</h1>
+    <p class="hero-subtitle">Building a Better Future</p>
+    <div class="hero-actions">
+      <a routerLink="/projects" class="btn btn-primary">View Projects</a>
+      <a routerLink="/contact" class="btn btn-secondary">Request a Quote</a>
+    </div>
+
+    <!-- Animated Stats Cards -->
+    <div class="stats-grid" #statsSection>
+      <div class="stat-card">
+        <div class="stat-number">{{ completedCount }}</div>
+        <div class="stat-label">Completed Projects</div>
+        <div class="stat-icon">✓</div>
+      </div>
+      <div class="stat-card stat-ongoing">
+        <div class="stat-number">{{ ongoingCount }}</div>
+        <div class="stat-label">Ongoing Projects</div>
+        <div class="stat-icon">◎</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section about-summary">
+  <div class="container grid grid-2">
+    <div class="about-text">
+      <h2 class="section-title" style="text-align: left;">Welcome to Aeternus Works</h2>
+      <p class="mb-2">Aeternus Works Construction (Pvt) Ltd is a Zimbabwean owned construction company committed to delivering durable, efficient and high quality building solutions. The name Aeternus reflects our dedication to structures that last through time.</p>
+      <a routerLink="/about" class="btn btn-primary">Read More About Us</a>
+    </div>
+    <div class="about-image">
+      <img src="logo.png" alt="Aeternus Works Logo" class="responsive-img pulse-img">
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <h2 class="section-title">Featured Projects</h2>
+    <div class="grid grid-3">
+      @for (project of featuredProjects; track project.id) {
+        <app-project-card [project]="project"></app-project-card>
+      }
+    </div>
+    <div class="text-center mt-2">
+      <a routerLink="/projects" class="btn btn-primary">View All Projects</a>
+    </div>
+  </div>
+</section>
+
+<section class="section services-summary">
+  <div class="container">
+    <h2 class="section-title">Our Core Services</h2>
+    <div class="grid grid-4 text-center">
+      <a routerLink="/service/building-construction" class="service-box">
+        <div class="service-icon-wrapper">🏗️</div>
+        <h3>Building Construction</h3>
+        <p>Residential, Commercial, and Industrial construction with high-quality materials.</p>
+        <span class="service-link-arrow">Learn More →</span>
+      </a>
+      <a routerLink="/service/renovations" class="service-box">
+        <div class="service-icon-wrapper">🔨</div>
+        <h3>Renovations & Refurbishment</h3>
+        <p>Transforming existing spaces into modern, functional and aesthetically pleasing areas.</p>
+        <span class="service-link-arrow">Learn More →</span>
+      </a>
+      <a routerLink="/service/civil-works" class="service-box">
+        <div class="service-icon-wrapper">🛣️</div>
+        <h3>Civil Works & Infrastructure</h3>
+        <p>Expertise in infrastructure projects, roads, and civil engineering works.</p>
+        <span class="service-link-arrow">Learn More →</span>
+      </a>
+      <a routerLink="/service/project-management" class="service-box">
+        <div class="service-icon-wrapper">📋</div>
+        <h3>Design-build & Project Mgmt</h3>
+        <p>End-to-end project management ensuring timely delivery and cost-effectiveness.</p>
+        <span class="service-link-arrow">Learn More →</span>
+      </a>
+    </div>
+  </div>
+</section>

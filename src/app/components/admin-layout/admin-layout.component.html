@@ -1,0 +1,57 @@
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Aeternus Works" class="sidebar-logo">
+      <h3>Admin Panel</h3>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🏗️</span> Projects
+      </a>
+      <a routerLink="/admin/renovations" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🔨</span> Renovation Ideas
+      </a>
+      <a routerLink="/admin/services" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📋</span> Services
+      </a>
+      <a routerLink="/admin/team" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">👥</span> Company Structure
+      </a>
+      <a routerLink="/admin/inquiries" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">✉️</span> Inquiries
+      </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button class="btn btn-outline-light btn-block" (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="admin-main">
+    <header class="admin-header">
+      <div class="header-left">
+        <h2>Aeternus Works Management</h2>
+      </div>
+      <div class="header-right">
+        <a routerLink="/" class="btn btn-sm btn-secondary" target="_blank">View Live Site</a>
+      </div>
+    </header>
+    
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="admin-footer">
+      <div class="footer-content">
+        <p>&copy; 2026 Aeternus Works Admin Console. All rights reserved.</p>
+        <p class="footer-version">Console v1.0.0</p>
+      </div>
+    </footer>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+.page-header {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.page-title {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-gold);
+}
+
+.page-breadcrumb a {
+  color: var(--text-light);
+}
+
+.page-breadcrumb a:hover {
+  color: var(--accent-orange);
+}
+
+.feature-box {
+  background: white;
+  padding: 2rem;
+  border-left: 4px solid var(--accent-gold);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.gold-text {
+  color: var(--accent-gold);
+}
+
+.values-container {
+  background-color: var(--bg-dark);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.value-item {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.value-icon {
+  width: 50px;
+  height: 50px;
+  background-color: var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--bg-dark);
+  flex-shrink: 0;
+}
+
+.strengths-box {
+  background-color: white;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-radius: 8px;
+}
+
+.strengths-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.strengths-box li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+}
+
+.strengths-box li i {
+  color: var(--accent-orange);
+}
+
+.strengths-box li:last-child {
+  border-bottom: none;
+}

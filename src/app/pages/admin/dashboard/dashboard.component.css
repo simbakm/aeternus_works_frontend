@@ -1,0 +1,122 @@
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.dashboard-header p {
+  color: #94a3b8;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.dash-card {
+  background-color: #111625;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid #1f293d;
+  border-left: 4px solid var(--accent-gold);
+}
+
+.dash-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  border-color: #2d3748;
+}
+
+.dash-card:nth-child(2) { border-left-color: #34d399; }
+.dash-card:nth-child(3) { border-left-color: var(--accent-orange); }
+
+.dash-card-icon {
+  font-size: 2.5rem;
+  margin-right: 1.5rem;
+  opacity: 0.9;
+}
+
+.dash-card-info h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dash-card-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 0.5rem;
+}
+
+.text-success { color: #34d399 !important; }
+.text-warning { color: var(--accent-orange) !important; }
+
+/* Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.chart-container {
+  background-color: #111625;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border: 1px solid #1f293d;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #1f293d;
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.chart-filter {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #2d3748;
+  border-radius: 4px;
+  background-color: #1e2538;
+  color: #ffffff;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.chart-filter:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}

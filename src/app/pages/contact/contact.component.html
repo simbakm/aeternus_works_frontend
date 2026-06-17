@@ -1,0 +1,107 @@
+<section class="page-header" style="background-color: var(--bg-dark);">
+  <div class="container text-center">
+    <h1 class="page-title">Contact Us</h1>
+    <p class="page-breadcrumb"><a href="/">Home</a> / Contact</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid-2">
+      <div class="contact-info-container">
+        <h2 class="section-title" style="text-align: left;">Get In Touch</h2>
+        <p class="mb-2">We would love to hear from you. Whether you have a question about a project, need a quote for a renovation, or just want to say hello, our team is ready to answer all your questions.</p>
+        
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon"><i class="icon-location"></i></div>
+            <div class="contact-text">
+              <h4>Physical Address</h4>
+              <p>Harare, Zimbabwe</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon"><i class="icon-phone"></i></div>
+            <div class="contact-text">
+              <h4>Phone Number</h4>
+              <p>+263 78 545 1677</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon"><i class="icon-whatsapp"></i></div>
+            <div class="contact-text">
+              <h4>WhatsApp</h4>
+              <p>+263 78 545 1677</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-icon"><i class="icon-email"></i></div>
+            <div class="contact-text">
+              <h4>Email Address</h4>
+              <p>info&#64;aeternusworks.co.zw</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links mt-2" style="background-color: transparent;">
+          <a href="#" class="social-circle"><i class="icon-facebook"></i></a>
+          <a href="#" class="social-circle"><i class="icon-twitter"></i></a>
+          <a href="#" class="social-circle"><i class="icon-linkedin"></i></a>
+        </div>
+      </div>
+      
+      <div class="contact-form-container">
+        <h2 class="section-title" style="text-align: left;">Send an Inquiry</h2>
+        
+        @if (isSubmitted) {
+          <div class="alert alert-success">
+            {{ successMessage }}
+          </div>
+        }
+        
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+          <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input type="text" id="name" formControlName="name" class="form-control" placeholder="John Doe">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="text" id="phone" formControlName="phone" class="form-control" placeholder="+263 7...">
+            </div>
+            
+            <div class="form-group">
+              <label for="whatsapp">WhatsApp Number *</label>
+              <input type="text" id="whatsapp" formControlName="whatsapp" class="form-control" placeholder="+263 7...">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address (Optional)</label>
+            <input type="email" id="email" formControlName="email" class="form-control" placeholder="john@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="project">Project / Renovation Idea</label>
+            <input type="text" id="project" formControlName="project" class="form-control" placeholder="What are you inquiring about?">
+          </div>
+          
+          <div class="form-group">
+            <label for="message">Your Message *</label>
+            <textarea id="message" formControlName="message" class="form-control" rows="5" placeholder="How can we help you?"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="contactForm.invalid">Send Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map-container">
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121545.98687355032!2d30.95759715!3d-17.824858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a4e706b1bbcf%3A0xc6c4f74229f34a17!2sHarare%2C%20Zimbabwe!5e0!3m2!1sen!2sus!4v1714413661559!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</section>

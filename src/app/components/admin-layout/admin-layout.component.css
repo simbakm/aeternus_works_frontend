@@ -1,0 +1,154 @@
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: #0a0e17;
+  color: #f1f5f9;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+  width: 250px;
+  background-color: #111625;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  border-right: 1px solid #1f293d;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid #1f293d;
+}
+
+.sidebar-logo {
+  max-width: 120px;
+  margin-bottom: 1rem;
+}
+
+.sidebar-header h3 {
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.5rem;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border-left: 4px solid transparent;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover, .nav-item.active {
+  background-color: rgba(241, 90, 36, 0.05);
+  color: white;
+  border-left-color: var(--accent-orange);
+}
+
+.nav-icon {
+  margin-right: 12px;
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #1f293d;
+}
+
+.btn-outline-light {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-light:hover {
+  background: #1f293d;
+  color: white;
+  border-color: #475569;
+}
+
+/* Main Content Styles */
+.admin-main {
+  flex: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header {
+  background-color: #111625;
+  padding: 1.2rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1f293d;
+  z-index: 10;
+}
+
+.header-left h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #ffffff;
+}
+
+.admin-content {
+  padding: 2rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Footer Styles */
+.admin-footer {
+  background-color: #111625;
+  padding: 1rem 2rem;
+  border-top: 1px solid #1f293d;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-version {
+  color: #475569;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .admin-main {
+    margin-left: 0;
+  }
+}

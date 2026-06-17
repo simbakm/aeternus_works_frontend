@@ -1,0 +1,32 @@
+<section class="page-header" style="background-color: var(--bg-dark);">
+  <div class="container text-center">
+    <h1 class="page-title">Renovation Ideas</h1>
+    <p class="page-breadcrumb"><a routerLink="/">Home</a> / Renovation Ideas</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="intro-text text-center mb-2">
+      <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+        Get inspired for your next home project. From modern kitchens to luxurious bathrooms and sleek exteriors, Aeternus Works Construction is here to bring your vision to life.
+      </p>
+    </div>
+
+    <div class="grid grid-2">
+      @for (idea of ideas; track idea.id) {
+        <div class="idea-card">
+          <div class="idea-img-wrapper">
+            <img [src]="idea.image" [alt]="idea.title" class="idea-img">
+            <div class="idea-category">{{ idea.category }}</div>
+          </div>
+          <div class="idea-content">
+            <h3 class="idea-title">{{ idea.title }}</h3>
+            <p class="idea-desc">{{ idea.description }}</p>
+            <a routerLink="/contact" [queryParams]="{ project: 'Renovation Idea: ' + idea.title }" class="btn btn-secondary mt-2">Discuss This Idea</a>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,90 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image: linear-gradient(rgba(17, 17, 17, 0.9), rgba(17, 17, 17, 0.9)), url('/harare.png');
+  background-size: cover;
+  background-position: center;
+  padding: 2rem;
+}
+
+.login-card {
+  background-color: #111625;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  width: 100%;
+  max-width: 400px;
+  padding: 2.5rem;
+  border: 1px solid #1f293d;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-logo {
+  max-width: 150px;
+  margin-bottom: 1rem;
+}
+
+.login-header h2 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.login-header p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #1e2538;
+  border: 1px solid #2d3748;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.form-control:focus {
+  border-color: var(--accent-orange);
+  outline: none;
+  background-color: #232a3f;
+}
+
+.btn-block {
+  width: 100%;
+  display: block;
+}
+
+.error-message {
+  color: #f87171;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.reset-link {
+  color: var(--accent-gold);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.reset-link:hover {
+  text-decoration: underline;
+}

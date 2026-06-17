@@ -1,0 +1,86 @@
+<div class="admin-header-actions mb-2">
+  <h1 class="page-title">Manage Customer Inquiries</h1>
+</div>
+
+<div class="admin-table-container">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Name</th>
+        <th>Project / Interest</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (inquiries.length === 0) {
+        <tr>
+          <td colspan="5" class="text-center">No inquiries found.</td>
+        </tr>
+      }
+      @for (inquiry of inquiries; track $index) {
+        <tr>
+          <td>{{ inquiry.date }}</td>
+          <td>{{ inquiry.name }}</td>
+          <td>{{ inquiry.project }}</td>
+          <td>
+            <span class="status-badge" [class.status-completed]="inquiry.status === 'Replied'" [class.status-ongoing]="inquiry.status === 'Pending'">
+              {{ inquiry.status }}
+            </span>
+          </td>
+          <td class="action-cell">
+            <button class="btn btn-sm btn-primary" (click)="viewInquiry($index)">View & Reply</button>
+            @if (inquiry.status === 'Pending') {
+              <button class="btn btn-sm btn-secondary" (click)="markAsReplied($index)">Mark Replied</button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<!-- View/Reply Modal -->
+@if (isViewing && currentInquiry) {
+  <div class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Inquiry Details</h3>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="mb-2" style="background: #1e2538; padding: 1.5rem; border-radius: 6px; border: 1px solid #1f293d;">
+          <p><strong>From:</strong> {{ currentInquiry.name }}</p>
+          <p><strong>Date:</strong> {{ currentInquiry.date }}</p>
+          <p><strong>Phone:</strong> {{ currentInquiry.phone }}</p>
+          @if (currentInquiry.whatsapp) { <p><strong>WhatsApp:</strong> {{ currentInquiry.whatsapp }}</p> }
+          @if (currentInquiry.email) { <p><strong>Email:</strong> {{ currentInquiry.email }}</p> }
+          <p><strong>Regarding:</strong> {{ currentInquiry.project }}</p>
+          <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #1f293d;">
+          <p style="white-space: pre-wrap;">{{ currentInquiry.message }}</p>
+        </div>
+
+        @if (currentInquiry.status === 'Pending') {
+          <h4 class="mb-1">Send a Reply</h4>
+          <form (ngSubmit)="sendReply()" #replyForm="ngForm">
+            <div class="form-group">
+              <textarea name="replyMessage" [(ngModel)]="replyMessage" required class="form-control" rows="5" placeholder="Type your reply here..."></textarea>
+            </div>
+            <div class="modal-footer" style="padding-left: 0; padding-right: 0; padding-bottom: 0;">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!replyForm.form.valid">Send Reply (Mock)</button>
+            </div>
+          </form>
+        } @else {
+          <div class="text-center">
+            <span class="status-badge status-completed mb-2">Already Replied</span>
+            <br>
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close Window</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

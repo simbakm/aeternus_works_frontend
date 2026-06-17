@@ -1,0 +1,19 @@
+<a [routerLink]="['/project', project.id]" class="project-card-link">
+  <div class="project-card">
+    <div class="card-img-wrapper">
+      <img [src]="project.images[0]" [alt]="project.title" class="card-img">
+      <div class="card-overlay">
+        <span class="btn btn-primary btn-sm">View Details</span>
+        <a routerLink="/contact" [queryParams]="{ project: project.title }" class="btn btn-secondary btn-sm" (click)="$event.stopPropagation()">Inquire Now</a>
+      </div>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">{{ project.title }}</h3>
+      <div class="card-meta">
+        <span class="category">{{ project.category }}</span>
+        <span class="date">{{ project.date }}</span>
+      </div>
+      <div class="corner-triangle"></div>
+    </div>
+  </div>
+</a>
