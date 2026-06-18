@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DataService, Inquiry } from '../../../services/data.service';
 
@@ -17,14 +18,27 @@ export class ManageInquiriesComponent implements OnInit {
   currentInquiry: Inquiry | null = null;
   replyMessage = '';
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.loadInquiries();
+    this.route.queryParamMap.subscribe(params => {
+      const focus = params.get('focus');
+      if (focus === 'pending') {
+        this.openFirstPendingInquiry();
+      }
+    });
   }
 
   loadInquiries(): void {
     this.inquiries = this.dataService.getInquiries();
+  }
+
+  openFirstPendingInquiry(): void {
+    const pendingIndex = this.inquiries.findIndex(inquiry => inquiry.status === 'Pending');
+    if (pendingIndex >= 0) {
+      this.viewInquiry(pendingIndex);
+    }
   }
 
   viewInquiry(index: number): void {

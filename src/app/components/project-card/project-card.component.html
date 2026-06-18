@@ -1,10 +1,10 @@
-<a [routerLink]="['/project', project.id]" class="project-card-link">
+<div class="project-card-link" role="link" tabindex="0" (click)="navigateToProject()" (keydown)="onCardKeydown($event)">
   <div class="project-card">
     <div class="card-img-wrapper">
       <img [src]="project.images[0]" [alt]="project.title" class="card-img">
       <div class="card-overlay">
         <span class="btn btn-primary btn-sm">View Details</span>
-        <a routerLink="/contact" [queryParams]="{ project: project.title }" class="btn btn-secondary btn-sm" (click)="$event.stopPropagation()">Inquire Now</a>
+        <button type="button" class="btn btn-secondary btn-sm" [routerLink]="['/contact']" [queryParams]="{ project: project.title }" (click)="$event.stopPropagation()">Inquire Now</button>
       </div>
     </div>
     <div class="card-content">
@@ -16,4 +16,4 @@
       <div class="corner-triangle"></div>
     </div>
   </div>
-</a>
+</div>

@@ -1,18 +1,19 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DataService, Project } from '../../services/data.service';
+import { DataService, Project, RenovationIdea } from '../../services/data.service';
 import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ProjectCardComponent],
+  imports: [CommonModule, RouterLink, ProjectCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   featuredProjects: Project[] = [];
+  featuredRenovationIdea?: RenovationIdea;
   completedCount = 0;
   ongoingCount = 0;
 
@@ -32,6 +33,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const all = this.dataService.getProjects();
     this.completedTarget = all.filter(p => p.status === 'Completed').length;
     this.ongoingTarget   = all.filter(p => p.status === 'Ongoing').length;
+    const ideas = this.dataService.getRenovationIdeas();
+    this.featuredRenovationIdea = ideas.length ? ideas[0] : undefined;
   }
 
   ngAfterViewInit(): void {

@@ -31,7 +31,11 @@ export class ManageRenovationsComponent implements OnInit {
       title: '',
       category: '',
       description: '',
-      image: ''
+      image: '',
+      beforeImage: '',
+      afterImage: '',
+      tips: ['', '', ''],
+      advice: ''
     };
   }
 
@@ -41,9 +45,29 @@ export class ManageRenovationsComponent implements OnInit {
     this.currentIdea.id = 'r' + new Date().getTime();
   }
 
+  onImageSelected(event: Event, field: 'image' | 'beforeImage' | 'afterImage'): void {
+    const element = event.target as HTMLInputElement;
+    const files = element.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.currentIdea[field] = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   openEditModal(idea: RenovationIdea): void {
     this.isEditing = true;
-    this.currentIdea = { ...idea };
+    this.currentIdea = {
+      ...idea,
+      beforeImage: idea.beforeImage || '',
+      afterImage: idea.afterImage || '',
+      tips: idea.tips ?? ['', '', ''],
+      advice: idea.advice || '',
+      image: idea.image || ''
+    };
   }
 
   closeModal(): void {

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Project } from '../../services/data.service';
 
 @Component({
@@ -11,4 +11,17 @@ import { Project } from '../../services/data.service';
 })
 export class ProjectCardComponent {
   @Input() project!: Project;
+
+  constructor(private router: Router) {}
+
+  navigateToProject(): void {
+    this.router.navigate(['/project', this.project.id]);
+  }
+
+  onCardKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.navigateToProject();
+    }
+  }
 }

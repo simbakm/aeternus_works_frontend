@@ -18,6 +18,10 @@ export interface RenovationIdea {
   title: string;
   description: string;
   image: string;
+  beforeImage: string;
+  afterImage: string;
+  tips: string[];
+  advice: string;
 }
 
 export interface TeamMember {
@@ -179,21 +183,33 @@ export class DataService {
       category: 'Kitchen',
       title: 'Open Concept Kitchen',
       description: 'Remove walls to create an airy open space perfect for entertaining.',
-      image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600&auto=format&fit=crop',
+      beforeImage: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop',
+      afterImage: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=800&auto=format&fit=crop',
+      tips: ['Plan the layout around workflow', 'Use durable surfaces for high-traffic areas', 'Maximize natural light with large windows'],
+      advice: 'Choose a timeless palette and invest in quality finishes to keep your kitchen looking fresh for years.'
     },
     {
       id: 'r2',
       category: 'Bathroom',
       title: 'Spa-Like Retreat',
       description: 'Upgrade your bathroom with a freestanding tub and walk-in shower.',
-      image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=600&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=600&auto=format&fit=crop',
+      beforeImage: 'https://images.unsplash.com/photo-1556228459-19bc82d0fbe3?q=80&w=800&auto=format&fit=crop',
+      afterImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=800&auto=format&fit=crop',
+      tips: ['Add layered lighting for ambiance', 'Choose large format tiles to reduce grout lines', 'Include storage to keep the space clutter-free'],
+      advice: 'Focus on moisture-resistant materials and good ventilation for a bathroom that stays beautiful long-term.'
     },
     {
       id: 'r3',
       category: 'Exterior',
       title: 'Modern Facade',
       description: 'Update the exterior of your home with modern materials and large windows.',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600&auto=format&fit=crop',
+      beforeImage: 'https://images.unsplash.com/photo-1461513451501-0f96b5aa1934?q=80&w=800&auto=format&fit=crop',
+      afterImage: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop',
+      tips: ['Balance materials with landscaping', 'Use clean lines for a modern look', 'Incorporate lighting to highlight key features'],
+      advice: 'A bold facade update can transform curb appeal and increase property value significantly.'
     }
   ];
 
@@ -295,6 +311,10 @@ export class DataService {
     return this.renovationIdeas;
   }
 
+  getRenovationIdeaById(id: string): RenovationIdea | undefined {
+    return this.renovationIdeas.find(r => r.id === id);
+  }
+
   getTeamMembers(): TeamMember[] {
     return this.team;
   }
@@ -319,6 +339,11 @@ export class DataService {
     if (!isPlatformBrowser(this.platformId)) return [];
     const str = localStorage.getItem('aeternus_inquiries');
     return str ? JSON.parse(str) : [];
+  }
+
+  getPendingInquiryCount(): number {
+    if (!isPlatformBrowser(this.platformId)) return 0;
+    return this.getInquiries().filter(inquiry => inquiry.status === 'Pending').length;
   }
 
   updateInquiry(index: number, inquiry: Inquiry): void {

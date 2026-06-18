@@ -1,0 +1,61 @@
+<section class="page-header" style="background-color: var(--bg-dark);">
+  <div class="container text-center">
+    <h1 class="page-title">Renovation Idea</h1>
+    <p class="page-breadcrumb"><a routerLink="/">Home</a> / <a routerLink="/renovations">Renovation Ideas</a> / {{ idea?.title }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div *ngIf="idea; else notFound">
+      <div class="detail-summary">
+        <div class="detail-header">
+          <div>
+            <span class="category-pill">{{ idea.category }}</span>
+            <h2>{{ idea.title }}</h2>
+          </div>
+          <a routerLink="/renovations" class="btn btn-secondary">Back to Ideas</a>
+        </div>
+
+        <p class="detail-description">{{ idea.description }}</p>
+      </div>
+
+      <div class="before-after-grid">
+        <div class="before-after-card">
+          <div class="label">Before</div>
+          <img [src]="idea.beforeImage || idea.image" [alt]="idea.title + ' before'" class="before-after-img">
+        </div>
+        <div class="before-after-card">
+          <div class="label">After</div>
+          <img [src]="idea.afterImage || idea.image" [alt]="idea.title + ' after'" class="before-after-img">
+        </div>
+      </div>
+
+      <div class="detail-panel">
+        <div class="detail-box">
+          <h3>Tips for Customers</h3>
+          <ul>
+            <li *ngFor="let tip of idea.tips || []">{{ tip }}</li>
+          </ul>
+        </div>
+
+        <div class="detail-box">
+          <h3>Advice</h3>
+          <p>{{ idea.advice }}</p>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a routerLink="/contact" [queryParams]="{ project: 'Renovation Idea: ' + idea.title }" class="btn btn-primary">Discuss This Idea</a>
+      </div>
+    </div>
+
+    <ng-template #notFound>
+      <div class="not-found-message">
+        <h3>Idea not found</h3>
+        <p>We could not locate that renovation idea. Please return to the renovation ideas list.</p>
+        <a routerLink="/renovations" class="btn btn-primary">View Ideas</a>
+      </div>
+    </ng-template>
+  </div>
+</section>

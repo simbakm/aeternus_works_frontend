@@ -81,3 +81,44 @@
     </div>
   </div>
 </section>
+
+<section class="section renovation-preview">
+  <div class="container">
+    <h2 class="section-title">From dream to design: Inspired home renovations</h2>
+    <div class="preview-grid">
+      <ng-container *ngIf="featuredRenovationIdea as idea">
+        <a [routerLink]="['/renovation', idea.id]" class="preview-card">
+          <div class="preview-text">
+            <span class="category-pill">{{ idea.category }}</span>
+            <h3>{{ idea.title }}</h3>
+            <p>{{ idea.description }}</p>
+            <div class="preview-details">
+              <div>
+                <strong>Tip</strong>
+                <p>{{ idea.tips?.[0] }}</p>
+              </div>
+              <div>
+                <strong>Advice</strong>
+                <p>{{ idea.advice }}</p>
+              </div>
+            </div>
+            <span class="btn btn-primary">View Renovation Details</span>
+          </div>
+          <div class="preview-images">
+            <div class="image-item">
+              <span>Before</span>
+              <img [src]="idea.beforeImage || idea.image" [alt]="idea.title + ' before'">
+            </div>
+            <div class="image-item">
+              <span>After</span>
+              <img [src]="idea.afterImage || idea.image" [alt]="idea.title + ' after'">
+            </div>
+          </div>
+        </a>
+      </ng-container>
+    </div>
+    <div class="text-center mt-2">
+      <a routerLink="/renovations" class="btn btn-primary">View More Renovation Ideas</a>
+    </div>
+  </div>
+</section>

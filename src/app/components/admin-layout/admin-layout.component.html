@@ -1,28 +1,31 @@
 <div class="admin-wrapper">
   <!-- Sidebar -->
-  <aside class="admin-sidebar">
+  <aside class="admin-sidebar" [class.open]="isSidebarOpen">
     <div class="sidebar-header">
-      <img src="logo.png" alt="Aeternus Works" class="sidebar-logo">
+      <div class="sidebar-top-row">
+        <img src="logo.png" alt="Aeternus Works" class="sidebar-logo">
+        <button class="sidebar-close" type="button" (click)="closeSidebar()" aria-label="Close menu">×</button>
+      </div>
       <h3>Admin Panel</h3>
     </div>
     
     <nav class="sidebar-nav">
-      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">📊</span> Dashboard
       </a>
-      <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">🏗️</span> Projects
       </a>
-      <a routerLink="/admin/renovations" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/renovations" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">🔨</span> Renovation Ideas
       </a>
-      <a routerLink="/admin/services" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/services" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">📋</span> Services
       </a>
-      <a routerLink="/admin/team" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/team" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">👥</span> Company Structure
       </a>
-      <a routerLink="/admin/inquiries" routerLinkActive="active" class="nav-item">
+      <a routerLink="/admin/inquiries" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
         <span class="nav-icon">✉️</span> Inquiries
       </a>
     </nav>
@@ -31,15 +34,21 @@
       <button class="btn btn-outline-light btn-block" (click)="logout()">Logout</button>
     </div>
   </aside>
+  <div class="sidebar-backdrop" [class.open]="isSidebarOpen" (click)="closeSidebar()"></div>
 
   <!-- Main Content -->
   <div class="admin-main">
     <header class="admin-header">
+      <button class="sidebar-toggle" type="button" (click)="toggleSidebar()" aria-label="Toggle menu">☰</button>
       <div class="header-left">
         <h2>Aeternus Works Management</h2>
       </div>
       <div class="header-right">
-        <a routerLink="/" class="btn btn-sm btn-secondary" target="_blank">View Live Site</a>
+        <button type="button" class="btn btn-sm btn-secondary notification-btn" (click)="navigateNotifications()" title="View new inquiries">
+        🔔
+        <span *ngIf="pendingInquiryCount > 0" class="notification-badge">{{ pendingInquiryCount }}</span>
+      </button>
+      <a routerLink="/" class="btn btn-sm btn-secondary" target="_blank">View Live Site</a>
       </div>
     </header>
     

@@ -20,20 +20,22 @@
         <img src="logo.png" alt="Aeternus Works Construction">
       </a>
       
-      <button class="mobile-toggle" (click)="toggleMenu()">
+      <button class="mobile-toggle" (click)="toggleMenu()" aria-label="Toggle navigation" [attr.aria-expanded]="isMenuOpen">
         <span></span>
         <span></span>
         <span></span>
       </button>
 
-      <nav class="nav-links" [class.active]="isMenuOpen">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        <a routerLink="/about" routerLinkActive="active">About Us</a>
-        <a routerLink="/projects" routerLinkActive="active">Projects</a>
-        <a routerLink="/renovations" routerLinkActive="active">Renovation Ideas</a>
-        <a routerLink="/company-structure" routerLinkActive="active">Company Structure</a>
-        <a routerLink="/contact" routerLinkActive="active">Contact Us</a>
-        <a routerLink="/contact" class="btn btn-primary ml-auto">Request a Quote</a>
+      <div class="mobile-backdrop" [class.open]="isMenuOpen" (click)="closeMenu()"></div>
+
+      <nav class="nav-links" [class.open]="isMenuOpen">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+        <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About Us</a>
+        <a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()">Projects</a>
+        <a routerLink="/renovations" routerLinkActive="active" (click)="closeMenu()">Renovation Ideas</a>
+        <a routerLink="/company-structure" routerLinkActive="active" (click)="closeMenu()">Company Structure</a>
+        <a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()">Contact Us</a>
+        <a routerLink="/contact" class="btn btn-primary ml-auto" (click)="closeMenu()">Request a Quote</a>
       </nav>
     </div>
   </div>
