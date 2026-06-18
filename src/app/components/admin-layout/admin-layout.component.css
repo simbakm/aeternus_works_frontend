@@ -208,7 +208,9 @@
   border-top: 1px solid #1f293d;
   color: #64748b;
   font-size: 0.85rem;
+  flex-shrink: 0;
 }
+
 
 .footer-content {
   display: flex;
@@ -261,6 +263,10 @@
   .admin-header {
     padding: 1rem 1.5rem;
   }
+
+  .admin-wrapper {
+    min-height: auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -289,6 +295,18 @@
   }
 
   .admin-main {
-    min-height: 100vh;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-content {
+    flex: 0 1 auto;
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-wrapper {
+    min-height: auto;
   }
 }
+
