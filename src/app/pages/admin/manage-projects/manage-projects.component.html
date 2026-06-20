@@ -17,11 +17,23 @@
       </tr>
     </thead>
     <tbody>
+      @if (isLoading) {
+        <tr>
+          <td colspan="7" class="text-center">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <div>Loading projects...</div>
+          </td>
+        </tr>
+      } @else if (projects.length === 0) {
+        <tr>
+          <td colspan="7" class="text-center">No projects found.</td>
+        </tr>
+      }
       @for (project of projects; track project.id) {
         <tr>
           <td>
             @if (project.images && project.images.length > 0) {
-              <img [src]="project.images[0]" class="table-thumb" alt="Thumbnail">
+              <img [src]="project.images[0].imageUrl" class="table-thumb" alt="Thumbnail">
             } @else {
               <span class="text-muted" style="font-size: 0.85rem;">No Image</span>
             }
@@ -40,7 +52,7 @@
           <td>{{ project.date }}</td>
           <td class="action-cell">
             <button class="btn-icon text-primary" (click)="openEditModal(project)" title="Edit Project">✏️</button>
-            <button class="btn-icon text-danger" (click)="deleteProject(project.id)" title="Delete Project">🗑️</button>
+            <button class="btn-icon text-danger" (click)="deleteProject(project.id!)" title="Delete Project">🗑️</button>
           </td>
         </tr>
       }
@@ -56,8 +68,16 @@
         <h3>{{ currentProject.id && currentProject.title ? 'Edit Project' : 'Add New Project' }}</h3>
         <button class="close-btn" (click)="closeModal()">&times;</button>
       </div>
+
+      <div *ngIf="isSubmitted" class="popup-backdrop">
+        <div class="popup-message" [ngClass]="popupType">
+          <h3>{{ popupType === 'success' ? 'Saved' : 'Submission Error' }}</h3>
+          <p>{{ popupMessage }}</p>
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">Close</button>
+        </div>
+      </div>
       
-      <form (ngSubmit)="saveProject()" #projectForm="ngForm" class="modal-body">
+      <form (ngSubmit)="saveProject(projectForm)" #projectForm="ngForm" class="modal-body">
         <div class="form-grid">
           <div class="form-group">
             <label>Title</label>
@@ -99,7 +119,7 @@
               <div class="image-previews">
                 @for (img of currentProject.images; track $index) {
                   <div class="preview-item">
-                    <img [src]="img" class="preview-img" alt="Preview">
+                    <img [src]="img.imageUrl" class="preview-img" alt="Preview">
                     <button type="button" class="remove-img-btn" (click)="removeImage($index)" title="Remove Image">&times;</button>
                   </div>
                 }
@@ -113,9 +133,15 @@
           </div>
         </div>
         
+        <div *ngIf="formErrorMessage" class="form-error-message">
+          {{ formErrorMessage }}
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary" [disabled]="!projectForm.form.valid">Save Project</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting">Saving...</span>
+            <span *ngIf="!isSubmitting">Save Project</span>
+          </button>
         </div>
       </form>
     </div>

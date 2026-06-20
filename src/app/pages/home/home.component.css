@@ -183,6 +183,17 @@
   font-size: 0.9rem;
   color: #cbd5e1;
   margin-bottom: 1rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 4.5rem;
+}
+
+.service-box {
+  max-width: 240px;
+  min-height: 330px;
+  padding: 1.75rem 1.5rem;
 }
 
 .service-link-arrow {
@@ -195,6 +206,21 @@
 
 .service-box:hover .service-link-arrow {
   letter-spacing: 1px;
+}
+
+/* Ensure service cards keep a fixed width so 1,2,3 items align neatly */
+.services-summary .grid-4 {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
+  justify-content: center;
+}
+.service-box {
+  max-width: 240px;
+}
+
+@media (max-width: 768px) {
+  .services-summary .grid-4 {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {

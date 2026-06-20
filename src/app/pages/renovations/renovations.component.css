@@ -20,15 +20,24 @@
   color: var(--accent-orange);
 }
 
+.grid {
+  display: grid;
+  gap: 2rem;  align-items: start;}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .idea-card {
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   transition: transform 0.3s ease;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  align-self: start;
+  min-height: 460px;
 }
 
 .idea-card:hover {
@@ -37,7 +46,7 @@
 
 .idea-img-wrapper {
   position: relative;
-  height: 250px;
+  height: 260px;
 }
 
 .idea-img {
@@ -57,6 +66,31 @@
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.idea-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.idea-card:hover .idea-overlay {
+  opacity: 1;
+}
+
+.idea-overlay .btn-secondary {
+  color: white;
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.idea-overlay .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.22);
 }
 
 .idea-content {

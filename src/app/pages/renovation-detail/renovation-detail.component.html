@@ -7,8 +7,14 @@
 
 <section class="section">
   <div class="container">
-    <div *ngIf="idea; else notFound">
-      <div class="detail-summary">
+    <div *ngIf="isLoading; else contentBlock">
+      <div class="loading-spinner"></div>
+      <p class="text-center">Loading renovation idea details...</p>
+    </div>
+
+    <ng-template #contentBlock>
+      <div *ngIf="idea; else notFound">
+        <div class="detail-summary">
         <div class="detail-header">
           <div>
             <span class="category-pill">{{ idea.category }}</span>
@@ -23,11 +29,11 @@
       <div class="before-after-grid">
         <div class="before-after-card">
           <div class="label">Before</div>
-          <img [src]="idea.beforeImage || idea.image" [alt]="idea.title + ' before'" class="before-after-img">
+          <img [src]="idea.beforeImageUrl || idea.imageUrl" [alt]="idea.title + ' before'" class="before-after-img">
         </div>
         <div class="before-after-card">
           <div class="label">After</div>
-          <img [src]="idea.afterImage || idea.image" [alt]="idea.title + ' after'" class="before-after-img">
+          <img [src]="idea.afterImageUrl || idea.imageUrl" [alt]="idea.title + ' after'" class="before-after-img">
         </div>
       </div>
 
@@ -35,7 +41,7 @@
         <div class="detail-box">
           <h3>Tips for Customers</h3>
           <ul>
-            <li *ngFor="let tip of idea.tips || []">{{ tip }}</li>
+            <li *ngFor="let tip of idea.tips || []">{{ tip.tipText || tip }}</li>
           </ul>
         </div>
 
@@ -48,7 +54,8 @@
       <div class="text-center">
         <a routerLink="/contact" [queryParams]="{ project: 'Renovation Idea: ' + idea.title }" class="btn btn-primary">Discuss This Idea</a>
       </div>
-    </div>
+      </div>
+    </ng-template>
 
     <ng-template #notFound>
       <div class="not-found-message">

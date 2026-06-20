@@ -12,6 +12,7 @@ import { DataService, ServiceInfo } from '../../services/data.service';
 export class ServiceDetailComponent implements OnInit {
   service: ServiceInfo | undefined;
   activeFaqIndex: number | null = null;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +23,11 @@ export class ServiceDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.service = this.dataService.getServiceById(id);
+        this.isLoading = true;
+        this.dataService.getServiceById(id).subscribe({
+          next: service => { this.service = service; this.isLoading = false; },
+          error: () => { this.isLoading = false; }
+        });
       }
     });
   }

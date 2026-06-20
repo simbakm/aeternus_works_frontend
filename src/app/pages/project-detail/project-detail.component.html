@@ -1,4 +1,23 @@
-@if (project) {
+@if (isLoading) {
+<section class="page-header" style="background-color: var(--bg-dark); height: 150px;">
+  <div class="container text-center">
+    <h1 class="page-title">Loading project...</h1>
+    <p class="page-breadcrumb">
+      <a routerLink="/">Home</a> / 
+      <a routerLink="/projects">Projects</a> /
+      Loading...
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container text-center">
+    <div class="loading-spinner"></div>
+    <p>Fetching project details, please wait.</p>
+  </div>
+</section>
+} @else {
+  @if (project) {
 <section class="page-header" style="background-color: var(--bg-dark); height: 150px;">
   <div class="container text-center">
     <h1 class="page-title">{{ project.title }}</h1>
@@ -49,14 +68,14 @@
       <!-- Project Content & Images -->
       <div class="project-content">
         <div class="main-image-container">
-          <img [src]="project.images[activeImageIndex]" [alt]="project.title" class="main-image">
+          <img [src]="getImageAt(activeImageIndex)" [alt]="project.title" class="main-image">
         </div>
         
-        @if (project.images.length > 1) {
+        @if (project && project.images.length > 1) {
           <div class="thumbnails-grid">
             @for (img of project.images; track $index) {
               <img 
-                [src]="img" 
+                [src]="getImageObject(img)" 
                 alt="Thumbnail" 
                 class="thumbnail" 
                 [class.active]="activeImageIndex === $index"
@@ -73,11 +92,12 @@
     </div>
   </div>
 </section>
-} @else {
+  } @else {
 <section class="section text-center">
   <div class="container">
     <h2>Project Not Found</h2>
     <a routerLink="/projects" class="btn btn-primary mt-2">Back to Projects</a>
   </div>
 </section>
+  }
 }

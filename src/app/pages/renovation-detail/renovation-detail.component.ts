@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RenovationDetailComponent implements OnInit {
   idea?: RenovationIdea;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +23,18 @@ export class RenovationDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.idea = this.dataService.getRenovationIdeaById(id);
+        this.isLoading = true;
+        this.idea = undefined;
+        this.dataService.getRenovationIdeaById(id).subscribe({
+          next: idea => {
+            this.idea = idea;
+            this.isLoading = false;
+          },
+          error: () => {
+            this.idea = undefined;
+            this.isLoading = false;
+          }
+        });
       }
     });
   }

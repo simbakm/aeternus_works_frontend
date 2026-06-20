@@ -1,5 +1,5 @@
 import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BaseChartDirective } from 'ng2-charts';
 import { DataService } from '../../../services/data.service';
@@ -8,7 +8,7 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, BaseChartDirective],
+  imports: [RouterLink, BaseChartDirective, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   totalProjects = 0;
   completedProjects = 0;
   ongoingProjects = 0;
+  pendingInquiries = 0;
 
   public lineChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -28,28 +29,12 @@ export class DashboardComponent implements OnInit {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: {
-          color: '#94a3b8'
-        }
+        labels: { color: '#94a3b8' }
       }
     },
     scales: {
-      x: {
-        grid: {
-          color: '#1f293d'
-        },
-        ticks: {
-          color: '#94a3b8'
-        }
-      },
-      y: {
-        grid: {
-          color: '#1f293d'
-        },
-        ticks: {
-          color: '#94a3b8'
-        }
-      }
+      x: { grid: { color: '#1f293d' }, ticks: { color: '#94a3b8' } },
+      y: { grid: { color: '#1f293d' }, ticks: { color: '#94a3b8' } }
     }
   };
 
@@ -62,28 +47,12 @@ export class DashboardComponent implements OnInit {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        labels: {
-          color: '#94a3b8'
-        }
+        labels: { color: '#94a3b8' }
       }
     },
     scales: {
-      x: {
-        grid: {
-          color: '#1f293d'
-        },
-        ticks: {
-          color: '#94a3b8'
-        }
-      },
-      y: {
-        grid: {
-          color: '#1f293d'
-        },
-        ticks: {
-          color: '#94a3b8'
-        }
-      }
+      x: { grid: { color: '#1f293d' }, ticks: { color: '#94a3b8' } },
+      y: { grid: { color: '#1f293d' }, ticks: { color: '#94a3b8' } }
     }
   };
 
@@ -95,10 +64,15 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const projects = this.dataService.getProjects();
-    this.totalProjects = projects.length;
-    this.completedProjects = projects.filter(p => p.status === 'Completed').length;
-    this.ongoingProjects = projects.filter(p => p.status === 'Ongoing').length;
+    this.dataService.getProjects().subscribe(projects => {
+      this.totalProjects = projects.length;
+      this.completedProjects = projects.filter(p => p.status === 'Completed').length;
+      this.ongoingProjects = projects.filter(p => p.status === 'Ongoing').length;
+    });
+
+    this.dataService.getInquiries().subscribe(inquiries => {
+      this.pendingInquiries = inquiries.filter(i => i.status === 'Pending').length;
+    });
 
     if (this.isBrowser) {
       this.lineChartData = this.dataService.getSiteTrafficData();

@@ -13,11 +13,11 @@
       </p>
     </div>
 
-    <div class="grid grid-3">
+    <div class="grid grid-3-fixed">
       @for (member of team; track member.id) {
         <div class="team-card">
           <div class="team-img-wrapper">
-            <img [src]="member.image || 'https://via.placeholder.com/300'" [alt]="member.name" class="team-img">
+            <img [src]="member.imageUrl || 'https://via.placeholder.com/300'" [alt]="member.name" class="team-img">
             <div class="team-role">{{ member.role }}</div>
           </div>
           <div class="team-content">

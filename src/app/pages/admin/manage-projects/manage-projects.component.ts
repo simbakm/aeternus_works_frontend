@@ -1,18 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DataService, Project } from '../../../services/data.service';
+import { CommonModule } from '@angular/common';
+import { DataService, Project, ProjectImage } from '../../../services/data.service';
 
 @Component({
   selector: 'app-manage-projects',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './manage-projects.component.html',
   styleUrl: './manage-projects.component.css'
 })
 export class ManageProjectsComponent implements OnInit {
   projects: Project[] = [];
-  
+  isLoading = false;
   isEditing = false;
+  isSubmitting = false;
+  isSubmitted = false;
+  popupMessage = '';
+  popupType: 'success' | 'error' = 'success';
+  formErrorMessage = '';
   currentProject: Project = this.getEmptyProject();
 
   constructor(private dataService: DataService) {}
@@ -22,12 +28,15 @@ export class ManageProjectsComponent implements OnInit {
   }
 
   loadProjects(): void {
-    this.projects = this.dataService.getProjects();
+    this.isLoading = true;
+    this.dataService.getProjects().subscribe({
+      next: projects => { this.projects = projects; this.isLoading = false; },
+      error: () => this.isLoading = false
+    });
   }
 
   getEmptyProject(): Project {
     return {
-      id: '',
       title: '',
       category: '',
       location: '',
@@ -39,31 +48,83 @@ export class ManageProjectsComponent implements OnInit {
   }
 
   openAddModal(): void {
+    this.resetModalState();
     this.isEditing = true;
     this.currentProject = this.getEmptyProject();
-    this.currentProject.id = 'p' + new Date().getTime(); // Simple ID generation
   }
 
   openEditModal(project: Project): void {
+    this.resetModalState();
     this.isEditing = true;
     this.currentProject = { ...project, images: project.images ? [...project.images] : [] };
   }
 
   closeModal(): void {
     this.isEditing = false;
+    this.resetModalState();
   }
 
-  saveProject(): void {
-    this.dataService.saveProject(this.currentProject);
-    this.loadProjects();
-    this.closeModal();
+  closePopup(): void {
+    if (this.popupType === 'success') {
+      this.closeModal();
+    } else {
+      this.isSubmitted = false;
+      this.popupMessage = '';
+      this.formErrorMessage = '';
+    }
+  }
+
+  saveProject(projectForm: any): void {
+    if (projectForm.valid) {
+      this.formErrorMessage = '';
+      this.isSubmitting = true;
+      this.dataService.saveProject(this.currentProject).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.popupType = 'success';
+          this.popupMessage = 'Project saved successfully.';
+          this.isSubmitted = true;
+          this.loadProjects();
+        },
+        error: () => {
+          this.isSubmitting = false;
+          this.popupType = 'error';
+          this.popupMessage = 'Unable to save the project. Please try again later.';
+          this.isSubmitted = true;
+        }
+      });
+    } else {
+      this.formErrorMessage = 'Please fill in all required fields before saving this project.';
+      this.popupType = 'error';
+      this.popupMessage = 'Please fill in all required fields before saving this project.';
+      this.isSubmitted = true;
+      projectForm.form.markAllAsTouched();
+    }
+  }
+
+  resetModalState(): void {
+    this.isSubmitting = false;
+    this.isSubmitted = false;
+    this.popupMessage = '';
+    this.popupType = 'success';
+    this.formErrorMessage = '';
   }
 
   deleteProject(id: string): void {
     if (confirm('Are you sure you want to delete this project?')) {
-      this.dataService.deleteProject(id);
-      this.loadProjects();
+      this.dataService.deleteProject(id).subscribe(() => this.loadProjects());
     }
+  }
+
+  addImageUrl(url: string): void {
+    if (url) {
+      const img: ProjectImage = { imageUrl: url, sortOrder: this.currentProject.images.length };
+      this.currentProject.images.push(img);
+    }
+  }
+
+  removeImage(index: number): void {
+    this.currentProject.images.splice(index, 1);
   }
 
   onFileSelected(event: Event): void {
@@ -74,14 +135,12 @@ export class ManageProjectsComponent implements OnInit {
         const file = files[i];
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          this.currentProject.images.push(e.target.result);
+          this.addImageUrl(e.target.result);
         };
         reader.readAsDataURL(file);
       }
     }
   }
-
-  removeImage(index: number): void {
-    this.currentProject.images.splice(index, 1);
-  }
 }
+
+

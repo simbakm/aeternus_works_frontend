@@ -18,7 +18,7 @@ export class ProjectsComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.projects = this.dataService.getProjects();
+    this.dataService.getProjects().subscribe(projects => this.projects = projects);
   }
 
   get filteredProjects(): Project[] {

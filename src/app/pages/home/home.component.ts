@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DataService, Project, RenovationIdea } from '../../services/data.service';
+import { DataService, Project, RenovationIdea, ServiceInfo } from '../../services/data.service';
 import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 
 @Component({
@@ -14,8 +14,18 @@ import { ProjectCardComponent } from '../../components/project-card/project-card
 export class HomeComponent implements OnInit, AfterViewInit {
   featuredProjects: Project[] = [];
   featuredRenovationIdea?: RenovationIdea;
+  services: ServiceInfo[] = [];
   completedCount = 0;
   ongoingCount = 0;
+  iconOptions = [
+    { value: 'building', label: 'Building', preview: '🏗️' },
+    { value: 'renovation', label: 'Renovation', preview: '🔨' },
+    { value: 'civil', label: 'Civil Works', preview: '🛣️' },
+    { value: 'project-management', label: 'Project Mgmt', preview: '📋' },
+    { value: 'masonry', label: 'Masonry', preview: '🧱' },
+    { value: 'plumbing', label: 'Plumbing', preview: '🔧' },
+    { value: 'generic', label: 'Generic', preview: '🛠️' }
+  ];
 
   private completedTarget = 0;
   private ongoingTarget = 0;
@@ -29,12 +39,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.featuredProjects = this.dataService.getFeaturedProjects();
-    const all = this.dataService.getProjects();
-    this.completedTarget = all.filter(p => p.status === 'Completed').length;
-    this.ongoingTarget   = all.filter(p => p.status === 'Ongoing').length;
-    const ideas = this.dataService.getRenovationIdeas();
-    this.featuredRenovationIdea = ideas.length ? ideas[0] : undefined;
+    this.dataService.getFeaturedProjects().subscribe(projects => this.featuredProjects = projects);
+    this.dataService.getProjects().subscribe(all => {
+      this.completedTarget = all.filter(p => p.status === 'Completed').length;
+      this.ongoingTarget   = all.filter(p => p.status === 'Ongoing').length;
+    });
+    this.dataService.getServices().subscribe(services => this.services = services);
+    this.dataService.getRenovationIdeas().subscribe(ideas => {
+      this.featuredRenovationIdea = ideas.length ? ideas[0] : undefined;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -56,6 +69,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.statsSection) {
       observer.observe(this.statsSection.nativeElement);
     }
+  }
+
+  getIconPreview(icon?: string): string {
+    if (!icon) {
+      return '🛠️';
+    }
+    const normalized = icon.startsWith('icon-') ? icon.replace('icon-', '') : icon;
+    const entry = this.iconOptions.find(option => option.value === icon || option.value === normalized);
+    return entry ? entry.preview : '🛠️';
   }
 
   private animateCounter(type: 'completed' | 'ongoing', target: number): void {

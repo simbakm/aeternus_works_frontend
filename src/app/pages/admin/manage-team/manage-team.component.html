@@ -15,11 +15,23 @@
       </tr>
     </thead>
     <tbody>
+      @if (isLoading) {
+        <tr>
+          <td colspan="5" class="text-center">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <div>Loading company structure...</div>
+          </td>
+        </tr>
+      } @else if (team.length === 0) {
+        <tr>
+          <td colspan="5" class="text-center">No team members found.</td>
+        </tr>
+      }
       @for (member of team; track member.id) {
         <tr>
           <td>
-            @if (member.image) {
-              <img [src]="member.image" class="table-thumb" style="border-radius: 50%;" alt="Portrait">
+            @if (member.imageUrl) {
+              <img [src]="member.imageUrl" class="table-thumb" style="border-radius: 50%;" alt="Portrait">
             } @else {
               <span class="text-muted" style="font-size: 0.85rem;">No Image</span>
             }
@@ -29,7 +41,7 @@
           <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ member.description }}</td>
           <td class="action-cell">
             <button class="btn-icon text-primary" (click)="openEditModal(member)" title="Edit Member">✏️</button>
-            <button class="btn-icon text-danger" (click)="deleteMember(member.id)" title="Delete Member">🗑️</button>
+            <button class="btn-icon text-danger" (click)="deleteMember(member.id!)" title="Delete Member">🗑️</button>
           </td>
         </tr>
       }
@@ -45,8 +57,16 @@
         <h3>{{ currentMember.id && currentMember.name ? 'Edit Member' : 'Add New Member' }}</h3>
         <button class="close-btn" (click)="closeModal()">&times;</button>
       </div>
+
+      <div *ngIf="isSubmitted" class="popup-backdrop">
+        <div class="popup-message" [ngClass]="popupType">
+          <h3>{{ popupType === 'success' ? 'Saved' : 'Submission Error' }}</h3>
+          <p>{{ popupMessage }}</p>
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">Close</button>
+        </div>
+      </div>
       
-      <form (ngSubmit)="saveMember()" #teamForm="ngForm" class="modal-body">
+      <form (ngSubmit)="saveMember(teamForm)" #teamForm="ngForm" class="modal-body">
         <div class="form-grid">
           <div class="form-group form-group-full">
             <label>Name</label>
@@ -65,10 +85,10 @@
               <span class="upload-text">Click to <strong>browse</strong> or upload portrait</span>
               <input type="file" (change)="onFileSelected($event)" accept="image/*">
             </div>
-            @if (currentMember.image) {
+            @if (currentMember.imageUrl) {
               <div class="image-previews">
                 <div class="preview-item" style="border-radius: 50%;">
-                  <img [src]="currentMember.image" class="preview-img" alt="Preview">
+                  <img [src]="currentMember.imageUrl" class="preview-img" alt="Preview">
                 </div>
               </div>
             }
@@ -80,9 +100,15 @@
           </div>
         </div>
         
+        <div *ngIf="formErrorMessage" class="form-error-message">
+          {{ formErrorMessage }}
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary" [disabled]="!teamForm.form.valid">Save Member</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting">Saving...</span>
+            <span *ngIf="!isSubmitting">Save Member</span>
+          </button>
         </div>
       </form>
     </div>

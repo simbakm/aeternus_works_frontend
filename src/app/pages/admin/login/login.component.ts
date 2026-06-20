@@ -15,14 +15,24 @@ export class LoginComponent {
   password = '';
   error = '';
 
+  isLoading = false;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   login(): void {
-    if (this.username === 'admin' && this.authService.login(this.password)) {
-      this.router.navigate(['/admin']);
-    } else {
-      this.error = 'Invalid username or password';
-    }
+    this.isLoading = true;
+    this.error = '';
+    
+    this.authService.login(this.username, this.password).subscribe(success => {
+      this.isLoading = false;
+      // Note: catchError in service returns false on error, or tap doesn't map to boolean properly
+      // Actually wait, let's just check if it's truthy
+      if (success) {
+        this.router.navigate(['/admin']);
+      } else {
+        this.error = 'Invalid username or password';
+      }
+    });
   }
 
   resetPassword(): void {

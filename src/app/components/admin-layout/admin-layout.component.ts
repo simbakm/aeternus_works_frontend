@@ -31,7 +31,7 @@ export class AdminLayoutComponent implements OnInit {
   }
 
   updateNotificationCount(): void {
-    this.pendingInquiryCount = this.dataService.getPendingInquiryCount();
+    this.dataService.getPendingInquiryCount().subscribe(count => this.pendingInquiryCount = count);
   }
 
   toggleSidebar(): void {

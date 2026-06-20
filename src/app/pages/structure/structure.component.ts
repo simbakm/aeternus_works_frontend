@@ -15,6 +15,6 @@ export class StructureComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.team = this.dataService.getTeamMembers();
+    this.dataService.getTeamMembers().subscribe(team => this.team = team);
   }
 }

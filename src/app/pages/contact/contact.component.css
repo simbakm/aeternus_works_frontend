@@ -134,6 +134,66 @@ label {
   border: 1px solid #c3e6cb;
 }
 
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-message {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.popup-message.success {
+  border: 1px solid #34d399;
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+.popup-message.success h3 {
+  color: #065f46;
+  font-weight: 700;
+}
+
+.popup-message.error {
+  border: 1px solid #f5c6cb;
+}
+
+.popup-message h3 {
+  margin-bottom: 1rem;
+  color: var(--accent-dark, #111);
+}
+
+.popup-message p {
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.validation-message {
+  margin-top: 0.35rem;
+  color: #dc2626;
+  font-size: 0.9rem;
+}
+
+.form-error-message {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  background-color: #fcebea;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
 .map-container {
   line-height: 0;
 }

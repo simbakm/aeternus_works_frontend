@@ -15,6 +15,6 @@ export class RenovationsComponent implements OnInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.ideas = this.dataService.getRenovationIdeas();
+    this.dataService.getRenovationIdeas().subscribe(ideas => this.ideas = ideas);
   }
 }

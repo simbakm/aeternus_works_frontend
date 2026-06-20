@@ -56,35 +56,46 @@
       <div class="contact-form-container">
         <h2 class="section-title" style="text-align: left;">Send an Inquiry</h2>
         
-        @if (isSubmitted) {
-          <div class="alert alert-success">
-            {{ successMessage }}
+        <div *ngIf="isSubmitted" class="popup-backdrop">
+          <div class="popup-message" [ngClass]="popupType">
+            <h3>{{ popupType === 'success' ? 'Inquiry Sent' : 'Submission Error' }}</h3>
+            <p>{{ popupMessage }}</p>
+            <button type="button" class="btn btn-secondary" (click)="closePopup()">Close</button>
           </div>
-        }
-        
+        </div>
+
         <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
           <div class="form-group">
             <label for="name">Your Name *</label>
-            <input type="text" id="name" formControlName="name" class="form-control" placeholder="John Doe">
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="phone">Phone Number *</label>
-              <input type="text" id="phone" formControlName="phone" class="form-control" placeholder="+263 7...">
-            </div>
-            
-            <div class="form-group">
-              <label for="whatsapp">WhatsApp Number *</label>
-              <input type="text" id="whatsapp" formControlName="whatsapp" class="form-control" placeholder="+263 7...">
+            <input #nameInput type="text" id="name" formControlName="name" class="form-control" placeholder="John Doe">
+            <div class="validation-message" *ngIf="contactForm.get('name')?.touched && contactForm.get('name')?.invalid">
+              Your name is required.
             </div>
           </div>
           
           <div class="form-group">
-            <label for="email">Email Address (Optional)</label>
-            <input type="email" id="email" formControlName="email" class="form-control" placeholder="john@example.com">
+            <label for="whatsapp">WhatsApp Number *</label>
+            <input type="text" id="whatsapp" formControlName="whatsapp" class="form-control" placeholder="+263 7...">
+            <div class="validation-message" *ngIf="contactForm.get('whatsapp')?.touched && contactForm.get('whatsapp')?.invalid">
+              WhatsApp number is required.
+            </div>
           </div>
           
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" formControlName="email" class="form-control" placeholder="john@example.com">
+            <div class="validation-message" *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.hasError('required')">
+              Email address is required.
+            </div>
+            <div class="validation-message" *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.hasError('email')">
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <div *ngIf="formErrorMessage" class="form-error-message">
+            {{ formErrorMessage }}
+          </div>
+
           <div class="form-group">
             <label for="project">Project / Renovation Idea</label>
             <input type="text" id="project" formControlName="project" class="form-control" placeholder="What are you inquiring about?">
@@ -93,9 +104,15 @@
           <div class="form-group">
             <label for="message">Your Message *</label>
             <textarea id="message" formControlName="message" class="form-control" rows="5" placeholder="How can we help you?"></textarea>
+            <div class="validation-message" *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.invalid">
+              Message is required.
+            </div>
           </div>
           
-          <button type="submit" class="btn btn-primary btn-block" [disabled]="contactForm.invalid">Send Inquiry</button>
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="isSubmitting">
+            <span *ngIf="isSubmitting">Sending...</span>
+            <span *ngIf="!isSubmitting">Send Inquiry</span>
+          </button>
         </form>
       </div>
     </div>

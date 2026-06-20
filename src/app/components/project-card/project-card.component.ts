@@ -24,4 +24,17 @@ export class ProjectCardComponent {
       this.navigateToProject();
     }
   }
+
+  getImage(project: Project): string {
+    if (!project) return 'assets/placeholder.png';
+    // project.images is an array of ProjectImage objects with imageUrl
+    if (project.images && project.images.length) {
+      const first = project.images[0];
+      if (first && (first as any).imageUrl) return (first as any).imageUrl;
+    }
+    // fallback to common single-property names
+    if ((project as any).imageUrl) return (project as any).imageUrl;
+    if ((project as any).image) return (project as any).image;
+    return 'assets/placeholder.png';
+  }
 }

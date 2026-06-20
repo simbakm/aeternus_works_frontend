@@ -13,17 +13,19 @@
       </p>
     </div>
 
-    <div class="grid grid-2">
+    <div class="grid grid-3-fixed">
       @for (idea of ideas; track idea.id) {
         <a routerLink="/renovation/{{ idea.id }}" class="idea-card idea-card-link">
           <div class="idea-img-wrapper">
-            <img [src]="idea.image" [alt]="idea.title" class="idea-img">
+            <img [src]="idea.imageUrl" [alt]="idea.title" class="idea-img">
             <div class="idea-category">{{ idea.category }}</div>
+            <div class="idea-overlay">
+              <span class="btn btn-secondary">View Details</span>
+            </div>
           </div>
           <div class="idea-content">
             <h3 class="idea-title">{{ idea.title }}</h3>
             <p class="idea-desc">{{ idea.description }}</p>
-            <span class="btn btn-secondary mt-2">View Details</span>
           </div>
         </a>
       }

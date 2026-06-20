@@ -39,10 +39,8 @@
 <section class="section section-dark">
   <div class="container">
     <h2 class="section-title">Featured Projects</h2>
-    <div class="grid grid-3">
-      @for (project of featuredProjects; track project.id) {
-        <app-project-card [project]="project"></app-project-card>
-      }
+    <div class="grid grid-3-fixed">
+      <app-project-card *ngFor="let project of featuredProjects" [project]="project"></app-project-card>
     </div>
     <div class="text-center mt-2">
       <a routerLink="/projects" class="btn btn-primary">View All Projects</a>
@@ -53,32 +51,21 @@
 <section class="section services-summary">
   <div class="container">
     <h2 class="section-title">Our Core Services</h2>
-    <div class="grid grid-4 text-center">
-      <a routerLink="/service/building-construction" class="service-box">
-        <div class="service-icon-wrapper">🏗️</div>
-        <h3>Building Construction</h3>
-        <p>Residential, Commercial, and Industrial construction with high-quality materials.</p>
-        <span class="service-link-arrow">Learn More →</span>
-      </a>
-      <a routerLink="/service/renovations" class="service-box">
-        <div class="service-icon-wrapper">🔨</div>
-        <h3>Renovations & Refurbishment</h3>
-        <p>Transforming existing spaces into modern, functional and aesthetically pleasing areas.</p>
-        <span class="service-link-arrow">Learn More →</span>
-      </a>
-      <a routerLink="/service/civil-works" class="service-box">
-        <div class="service-icon-wrapper">🛣️</div>
-        <h3>Civil Works & Infrastructure</h3>
-        <p>Expertise in infrastructure projects, roads, and civil engineering works.</p>
-        <span class="service-link-arrow">Learn More →</span>
-      </a>
-      <a routerLink="/service/project-management" class="service-box">
-        <div class="service-icon-wrapper">📋</div>
-        <h3>Design-build & Project Mgmt</h3>
-        <p>End-to-end project management ensuring timely delivery and cost-effectiveness.</p>
+    <div class="grid grid-4 text-center" *ngIf="services.length; else noServices">
+      <a *ngFor="let service of services" [routerLink]="['/service', service.id]" class="service-box">
+        <div class="service-icon-wrapper">
+          {{ getIconPreview(service.icon) }}
+        </div>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
         <span class="service-link-arrow">Learn More →</span>
       </a>
     </div>
+    <ng-template #noServices>
+      <div class="text-center">
+        <p>No services are available yet. Please check back soon.</p>
+      </div>
+    </ng-template>
   </div>
 </section>
 
@@ -95,7 +82,7 @@
             <div class="preview-details">
               <div>
                 <strong>Tip</strong>
-                <p>{{ idea.tips?.[0] }}</p>
+                <p>{{ idea.tips && idea.tips.length ? idea.tips[0].tipText : '' }}</p>
               </div>
               <div>
                 <strong>Advice</strong>
@@ -107,11 +94,11 @@
           <div class="preview-images">
             <div class="image-item">
               <span>Before</span>
-              <img [src]="idea.beforeImage || idea.image" [alt]="idea.title + ' before'">
+              <img [src]="idea.beforeImageUrl || idea.imageUrl" [alt]="idea.title + ' before'">
             </div>
             <div class="image-item">
               <span>After</span>
-              <img [src]="idea.afterImage || idea.image" [alt]="idea.title + ' after'">
+              <img [src]="idea.afterImageUrl || idea.imageUrl" [alt]="idea.title + ' after'">
             </div>
           </div>
         </a>

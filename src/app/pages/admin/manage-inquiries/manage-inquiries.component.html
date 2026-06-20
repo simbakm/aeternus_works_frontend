@@ -14,7 +14,14 @@
       </tr>
     </thead>
     <tbody>
-      @if (inquiries.length === 0) {
+      @if (isLoading) {
+        <tr>
+          <td colspan="5" class="text-center">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <div>Loading inquiries...</div>
+          </td>
+        </tr>
+      } @else if (inquiries.length === 0) {
         <tr>
           <td colspan="5" class="text-center">No inquiries found.</td>
         </tr>
@@ -30,10 +37,7 @@
             </span>
           </td>
           <td class="action-cell">
-            <button class="btn btn-sm btn-primary" (click)="viewInquiry($index)">View & Reply</button>
-            @if (inquiry.status === 'Pending') {
-              <button class="btn btn-sm btn-secondary" (click)="markAsReplied($index)">Mark Replied</button>
-            }
+            <button class="btn btn-sm btn-primary" (click)="viewInquiry(inquiry)">View & Reply</button>
           </td>
         </tr>
       }
@@ -64,13 +68,25 @@
 
         @if (currentInquiry.status === 'Pending') {
           <h4 class="mb-1">Send a Reply</h4>
-          <form (ngSubmit)="sendReply()" #replyForm="ngForm">
+          <form (ngSubmit)="sendReply(replyForm)" #replyForm="ngForm">
             <div class="form-group">
-              <textarea name="replyMessage" [(ngModel)]="replyMessage" required class="form-control" rows="5" placeholder="Type your reply here..."></textarea>
+              <textarea #replyTextarea name="replyMessage" [(ngModel)]="replyMessage" required class="form-control auto-resize" rows="3" placeholder="Type your reply here..." (input)="autoResize($event)"></textarea>
+            </div>
+            <div *ngIf="replyError && !replySuccess" class="form-error-message">
+              {{ replyError }}
+            </div>
+            <div *ngIf="replySuccess" class="form-success-message">
+              {{ replySuccess }}
             </div>
             <div class="modal-footer" style="padding-left: 0; padding-right: 0; padding-bottom: 0;">
               <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-              <button type="submit" class="btn btn-primary" [disabled]="!replyForm.form.valid">Send Reply (Mock)</button>
+              <button *ngIf="!replySuccess" type="submit" class="btn btn-primary" [disabled]="isSendingReply || !replyForm.form.valid">
+                <span *ngIf="isSendingReply">Sending...</span>
+                <span *ngIf="!isSendingReply">Send Reply</span>
+              </button>
+              <a *ngIf="replySent && replyWhatsappLink" [href]="replyWhatsappLink" target="_blank" [class]="replySuccess ? 'btn btn-primary' : 'btn btn-success'" rel="noreferrer noopener">
+                Open WhatsApp Chat
+              </a>
             </div>
           </form>
         } @else {

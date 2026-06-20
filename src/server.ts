@@ -26,6 +26,8 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
+app.use(express.json());
+
 /**
  * Serve static files from /browser
  */
