@@ -22,6 +22,7 @@ export class ManageInquiriesComponent implements OnInit {
   replyError = '';
   replyWhatsappLink = '';
   replySent = false;
+  showReplyForm = false;
 
   constructor(private dataService: DataService, private route: ActivatedRoute) {}
 
@@ -37,7 +38,19 @@ export class ManageInquiriesComponent implements OnInit {
   loadInquiries(): void {
     this.isLoading = true;
     this.dataService.getInquiries().subscribe({
-      next: inquiries => { this.inquiries = inquiries; this.isLoading = false; },
+      next: inquiries => {
+        this.inquiries = inquiries.sort((a, b) => {
+          const aPending = a.status?.toLowerCase() === 'pending';
+          const bPending = b.status?.toLowerCase() === 'pending';
+          if (aPending && !bPending) return -1;
+          if (!aPending && bPending) return 1;
+          
+          const dateA = a.date ? new Date(a.date).getTime() : 0;
+          const dateB = b.date ? new Date(b.date).getTime() : 0;
+          return dateB - dateA;
+        });
+        this.isLoading = false;
+      },
       error: () => this.isLoading = false
     });
   }
@@ -57,29 +70,51 @@ export class ManageInquiriesComponent implements OnInit {
     this.replyError = '';
     this.replyWhatsappLink = '';
     this.replySent = false;
-    // Let the DOM update, then auto-resize and focus the textarea so the user can start editing immediately.
+
+    if (this.isPending(inquiry.status)) {
+      this.showReplyForm = true;
+      this.replyMessage = this.buildReplyTemplate(inquiry.name);
+      // Let the DOM update, then auto-resize and focus the textarea so the user can start editing immediately.
+      setTimeout(() => {
+        this.autoResize();
+        try {
+          const el = this.replyTextarea?.nativeElement;
+          if (el) {
+            el.focus();
+            // place cursor at first editable line (first non-empty line after greeting)
+            const val = el.value || '';
+            let pos = 0;
+            const firstNewline = val.indexOf('\n');
+            if (firstNewline >= 0) {
+              pos = firstNewline + 1;
+              while (pos < val.length && (val[pos] === '\n' || val[pos] === '\r')) {
+                pos++;
+              }
+            }
+            if (pos > val.length) pos = val.length;
+            el.setSelectionRange(pos, pos);
+          }
+        } catch (e) {
+          // ignore focus errors
+        }
+      });
+    } else {
+      this.showReplyForm = false;
+      this.replyMessage = '';
+    }
+  }
+
+  openReplyForm(): void {
+    this.showReplyForm = true;
+    this.replyMessage = '';
     setTimeout(() => {
       this.autoResize();
       try {
         const el = this.replyTextarea?.nativeElement;
         if (el) {
           el.focus();
-          // place cursor at first editable line (first non-empty line after greeting)
-          const val = el.value || '';
-          let pos = 0;
-          const firstNewline = val.indexOf('\n');
-          if (firstNewline >= 0) {
-            pos = firstNewline + 1;
-            while (pos < val.length && (val[pos] === '\n' || val[pos] === '\r')) {
-              pos++;
-            }
-          }
-          if (pos > val.length) pos = val.length;
-          el.setSelectionRange(pos, pos);
         }
-      } catch (e) {
-        // ignore focus errors
-      }
+      } catch (e) {}
     });
   }
 
@@ -166,5 +201,19 @@ export class ManageInquiriesComponent implements OnInit {
     if (!el) return;
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
+  }
+
+  formatStatus(status: string | undefined): string {
+    if (!status) return 'Unknown';
+    if (status.toLowerCase() === 'pending') return 'Pending';
+    if (status.toLowerCase() === 'replied_email') return 'Replied';
+    if (status.toLowerCase() === 'replied_whatsapp') return 'Replied';
+    if (status.toLowerCase() === 'replied') return 'Replied';
+    
+    return status.replace(/_/g, ' ').replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase());
+  }
+
+  isPending(status: string | undefined): boolean {
+    return status?.toLowerCase() === 'pending';
   }
 }

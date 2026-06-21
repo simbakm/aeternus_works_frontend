@@ -50,7 +50,7 @@
 
 <section class="section services-summary">
   <div class="container">
-    <h2 class="section-title">Our Core Services</h2>
+    <h2 class="section-title">Our Services</h2>
     <div class="grid grid-4 text-center" *ngIf="services.length; else noServices">
       <a *ngFor="let service of services" [routerLink]="['/service', service.id]" class="service-box">
         <div class="service-icon-wrapper">

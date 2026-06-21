@@ -23,17 +23,29 @@
           
           <div class="contact-item">
             <div class="contact-icon"><i class="icon-phone"></i></div>
-            <div class="contact-text">
+            <div class="contact-text" style="overflow: visible;">
               <h4>Phone Number</h4>
-              <p>+263 78 545 1677</p>
+              <div class="phone-popup-container">
+                <span class="phone-number-trigger" (click)="togglePopup(1, $event)">+263 78 545 1677</span>
+                <div class="phone-popup" *ngIf="activePopup === 1" (click)="$event.stopPropagation()">
+                  <a href="tel:+263785451677"><i class="icon-phone"></i> Regular Call</a>
+                  <a href="https://wa.me/263785451677" target="_blank" rel="noopener noreferrer"><i class="icon-whatsapp"></i> WhatsApp</a>
+                </div>
+              </div>
             </div>
           </div>
           
           <div class="contact-item">
-            <div class="contact-icon"><i class="icon-whatsapp"></i></div>
-            <div class="contact-text">
-              <h4>WhatsApp</h4>
-              <p>+263 78 545 1677</p>
+            <div class="contact-icon"><i class="icon-phone"></i></div>
+            <div class="contact-text" style="overflow: visible;">
+              <h4>Phone Number</h4>
+              <div class="phone-popup-container">
+                <span class="phone-number-trigger" (click)="togglePopup(2, $event)">+263 78 545 1677</span>
+                <div class="phone-popup" *ngIf="activePopup === 2" (click)="$event.stopPropagation()">
+                  <a href="tel:+263785451677"><i class="icon-phone"></i> Regular Call</a>
+                  <a href="https://wa.me/263785451677" target="_blank" rel="noopener noreferrer"><i class="icon-whatsapp"></i> WhatsApp</a>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -41,7 +53,7 @@
             <div class="contact-icon"><i class="icon-email"></i></div>
             <div class="contact-text">
               <h4>Email Address</h4>
-              <p>info&#64;aeternusworks.co.zw</p>
+              <a href="mailto:info@aeternusworks.co.zw" class="email-link">info&#64;aeternusworks.co.zw</a>
             </div>
           </div>
         </div>

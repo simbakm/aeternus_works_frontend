@@ -23,12 +23,12 @@
       </div>
 
       <div class="footer-col">
-        <h3>Our Services</h3>
+        <h3>Our Core Services</h3>
         <ul class="footer-links">
-          <li><a routerLink="/projects">Building Construction</a></li>
-          <li><a routerLink="/renovations">Renovations & Refurbishment</a></li>
-          <li><a routerLink="/projects">Civil Works & Infrastructure</a></li>
-          <li><a routerLink="/about">Design-build & Project Management</a></li>
+          <li><span>Building Construction</span></li>
+          <li><span>Renovations & Refurbishment</span></li>
+          <li><span>Civil Works & Infrastructure</span></li>
+          <li><span>Design-build & Project Management</span></li>
         </ul>
       </div>
 
@@ -39,17 +39,29 @@
             <i class="icon-location"></i>
             <span>Harare, Zimbabwe</span>
           </li>
-          <li>
+          <li style="position: relative; align-items: center;">
             <i class="icon-phone"></i>
-            <span>+263 78 545 1677</span>
+            <div class="phone-popup-container">
+              <span class="phone-number-trigger" (click)="togglePopup(1, $event)">+263 78 545 1677</span>
+              <div class="phone-popup" *ngIf="activePopup === 1" (click)="$event.stopPropagation()">
+                <a href="tel:+263785451677"><i class="icon-phone"></i> Regular Call</a>
+                <a href="https://wa.me/263785451677" target="_blank" rel="noopener noreferrer"><i class="icon-whatsapp"></i> WhatsApp</a>
+              </div>
+            </div>
           </li>
-          <li>
-            <i class="icon-whatsapp"></i>
-            <span>+263 78 545 1677</span>
+          <li style="position: relative; align-items: center;">
+            <i class="icon-phone"></i>
+            <div class="phone-popup-container">
+              <span class="phone-number-trigger" (click)="togglePopup(2, $event)">+263 78 545 1677</span>
+              <div class="phone-popup" *ngIf="activePopup === 2" (click)="$event.stopPropagation()">
+                <a href="tel:+263785451677"><i class="icon-phone"></i> Regular Call</a>
+                <a href="https://wa.me/263785451677" target="_blank" rel="noopener noreferrer"><i class="icon-whatsapp"></i> WhatsApp</a>
+              </div>
+            </div>
           </li>
           <li>
             <i class="icon-email"></i>
-            <span>info&#64;aeternusworks.co.zw</span>
+            <a href="mailto:info@aeternusworks.co.zw" class="email-link">info&#64;aeternusworks.co.zw</a>
           </li>
         </ul>
       </div>

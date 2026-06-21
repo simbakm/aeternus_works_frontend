@@ -2,6 +2,7 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
+import { API_URL } from '../config/api.config';
 
 export interface AuthResponse {
   token: string;
@@ -14,7 +15,7 @@ export interface AuthResponse {
 })
 export class AuthService {
   private isLoggedIn = false;
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = `${API_URL}/auth`;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

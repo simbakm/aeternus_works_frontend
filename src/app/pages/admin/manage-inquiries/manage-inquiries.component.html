@@ -32,8 +32,8 @@
           <td>{{ inquiry.name }}</td>
           <td>{{ inquiry.project }}</td>
           <td>
-            <span class="status-badge" [class.status-completed]="inquiry.status === 'Replied'" [class.status-ongoing]="inquiry.status === 'Pending'">
-              {{ inquiry.status }}
+            <span class="status-badge" [class.status-completed]="!isPending(inquiry.status)" [class.status-ongoing]="isPending(inquiry.status)">
+              {{ formatStatus(inquiry.status) }}
             </span>
           </td>
           <td class="action-cell">
@@ -66,8 +66,32 @@
           <p style="white-space: pre-wrap;">{{ currentInquiry.message }}</p>
         </div>
 
-        @if (currentInquiry.status === 'Pending') {
-          <h4 class="mb-1">Send a Reply</h4>
+        @if (currentInquiry.messageLogs && currentInquiry.messageLogs.length > 0) {
+          <div class="mb-3">
+            <h4 class="mb-2">Reply History ({{ currentInquiry.messageLogs.length }})</h4>
+            @for (log of currentInquiry.messageLogs; track log.id) {
+              <div style="background: #2a344a; padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid #374151;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: #9ca3af; margin-bottom: 0.5rem;">
+                  <span><strong>{{ log.channel | titlecase }}</strong> - {{ log.recipient }}</span>
+                  <span>{{ log.sentAt | date:'medium' }}</span>
+                </div>
+                <p style="white-space: pre-wrap; margin: 0; color: #e5e7eb;">{{ log.messageBody }}</p>
+              </div>
+            }
+          </div>
+        }
+
+        @if (!isPending(currentInquiry.status)) {
+          <div class="text-center mb-3">
+            <span class="status-badge status-completed mb-2">Already Replied ({{ formatStatus(currentInquiry.status) }})</span>
+            @if (!showReplyForm) {
+              <br><br>
+              <button class="btn btn-primary" (click)="openReplyForm()">Send Another Message</button>
+            }
+          </div>
+        }
+        @if (showReplyForm) {
+          <h4 class="mb-1">{{ isPending(currentInquiry.status) ? 'Send a Reply' : 'Send Another Message' }}</h4>
           <form (ngSubmit)="sendReply(replyForm)" #replyForm="ngForm">
             <div class="form-group">
               <textarea #replyTextarea name="replyMessage" [(ngModel)]="replyMessage" required class="form-control auto-resize" rows="3" placeholder="Type your reply here..." (input)="autoResize($event)"></textarea>
@@ -82,19 +106,13 @@
               <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
               <button *ngIf="!replySuccess" type="submit" class="btn btn-primary" [disabled]="isSendingReply || !replyForm.form.valid">
                 <span *ngIf="isSendingReply">Sending...</span>
-                <span *ngIf="!isSendingReply">Send Reply</span>
+                <span *ngIf="!isSendingReply">{{ isPending(currentInquiry.status) ? 'Send Reply' : 'Send Message' }}</span>
               </button>
               <a *ngIf="replySent && replyWhatsappLink" [href]="replyWhatsappLink" target="_blank" [class]="replySuccess ? 'btn btn-primary' : 'btn btn-success'" rel="noreferrer noopener">
                 Open WhatsApp Chat
               </a>
             </div>
           </form>
-        } @else {
-          <div class="text-center">
-            <span class="status-badge status-completed mb-2">Already Replied</span>
-            <br>
-            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close Window</button>
-          </div>
         }
       </div>
     </div>

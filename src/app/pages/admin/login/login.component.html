@@ -21,7 +21,13 @@
         <div class="error-message">{{ error }}</div>
       }
 
-      <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.form.valid">Login</button>
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.form.valid || isLoading">
+        @if (isLoading) {
+          Processing...
+        } @else {
+          Login
+        }
+      </button>
       
       <div class="text-center mt-2">
         <a href="javascript:void(0)" (click)="resetPassword()" class="reset-link">Forgot Password?</a>

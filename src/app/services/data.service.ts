@@ -2,6 +2,7 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { API_URL } from '../config/api.config';
 
 export interface ProjectImage {
   id?: string;
@@ -47,6 +48,15 @@ export interface TeamMember {
   sortOrder?: number;
 }
 
+export interface MessageLog {
+  id?: string;
+  channel: string;
+  recipient: string;
+  messageBody: string;
+  status: string;
+  sentAt: string;
+}
+
 export interface Inquiry {
   id?: string;
   name: string;
@@ -57,6 +67,7 @@ export interface Inquiry {
   message: string;
   date?: string;
   status?: string;
+  messageLogs?: MessageLog[];
 }
 
 export interface ServiceProcessStep {
@@ -88,7 +99,7 @@ export interface ServiceInfo {
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'https://aeternus-works-back-end.onrender.com/api';
+  private apiUrl = API_URL;
 
   constructor(private http: HttpClient) {}
 

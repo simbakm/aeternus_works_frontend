@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -57,6 +57,22 @@ export class ContactComponent implements OnInit {
     this.isSubmitted = false;
     this.popupMessage = '';
     this.formErrorMessage = '';
+  }
+
+  activePopup: number | null = null;
+
+  togglePopup(index: number, event: Event): void {
+    event.stopPropagation();
+    if (this.activePopup === index) {
+      this.activePopup = null;
+    } else {
+      this.activePopup = index;
+    }
+  }
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.activePopup = null;
   }
 
   onSubmit() {
