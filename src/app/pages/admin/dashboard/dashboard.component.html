@@ -54,10 +54,10 @@
     <div class="chart-container">
       <div class="chart-header">
         <h3>Customer Inquiries</h3>
-        <select class="chart-filter">
-          <option>This Week</option>
-          <option>This Month</option>
-          <option>This Year</option>
+        <select class="chart-filter" [(ngModel)]="inquiryViewMode" (change)="updateInquiriesChart()">
+          <option value="day">By Day (Last 7 Days)</option>
+          <option value="week">By Week (Last 7 Weeks)</option>
+          <option value="month">By Month (Last 7 Months)</option>
         </select>
       </div>
       <div class="chart-wrapper">
