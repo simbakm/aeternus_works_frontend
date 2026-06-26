@@ -19,6 +19,7 @@ import { ManageRenovationsComponent } from './pages/admin/manage-renovations/man
 import { ManageServicesComponent } from './pages/admin/manage-services/manage-services.component';
 import { ManageTeamComponent } from './pages/admin/manage-team/manage-team.component';
 import { ManageInquiriesComponent } from './pages/admin/manage-inquiries/manage-inquiries.component';
+import { SettingsComponent } from './pages/admin/settings/settings.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -44,7 +45,8 @@ export const routes: Routes = [
       { path: 'renovations', component: ManageRenovationsComponent },
       { path: 'services', component: ManageServicesComponent },
       { path: 'team', component: ManageTeamComponent },
-      { path: 'inquiries', component: ManageInquiriesComponent }
+      { path: 'inquiries', component: ManageInquiriesComponent },
+      { path: 'settings', component: SettingsComponent }
     ]
   },
 

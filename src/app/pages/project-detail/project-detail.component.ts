@@ -62,4 +62,38 @@ export class ProjectDetailComponent implements OnInit {
     if (img.url) return img.url;
     return 'assets/placeholder.png';
   }
+
+  touchStartX = 0;
+  touchEndX = 0;
+
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
+
+  handleSwipe() {
+    if (!this.project || !this.project.images || this.project.images.length <= 1) return;
+    const swipeThreshold = 50;
+    if (this.touchEndX < this.touchStartX - swipeThreshold) {
+      // Swiped left, go to next image
+      this.nextImage();
+    } else if (this.touchEndX > this.touchStartX + swipeThreshold) {
+      // Swiped right, go to previous image
+      this.prevImage();
+    }
+  }
+
+  nextImage() {
+    if (!this.project || !this.project.images) return;
+    this.activeImageIndex = (this.activeImageIndex + 1) % this.project.images.length;
+  }
+
+  prevImage() {
+    if (!this.project || !this.project.images) return;
+    this.activeImageIndex = (this.activeImageIndex - 1 + this.project.images.length) % this.project.images.length;
+  }
 }

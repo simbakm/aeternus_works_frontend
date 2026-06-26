@@ -1,0 +1,287 @@
+<div class="settings-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1 class="page-title">
+        <span class="title-icon">⚙️</span>
+        Settings
+      </h1>
+      <p class="page-subtitle">Manage administrator accounts for the admin panel</p>
+    </div>
+    <button *ngIf="isSuperAdmin" class="btn-create" (click)="openCreateModal()" id="create-admin-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Add Admin
+    </button>
+  </div>
+
+  <!-- Read-only Banner for non-super admins -->
+  <div *ngIf="!isSuperAdmin" class="readonly-banner">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    You have <strong>read-only access</strong> to this page. Only the Super Admin can create, edit, or delete admin users.
+  </div>
+
+  <!-- Admin Users Table -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2 class="table-title">Administrator Accounts</h2>
+      <span class="admin-count">{{ admins.length }} {{ admins.length === 1 ? 'user' : 'users' }}</span>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading administrators...</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && admins.length === 0" class="empty-state">
+      <div class="empty-icon">👤</div>
+      <p>No admin users found</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!isLoading && admins.length > 0" class="table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created</th>
+            <th>Last Login</th>
+            <th *ngIf="isSuperAdmin">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let admin of admins" [class.current-user]="admin.username === currentUsername">
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar">{{ admin.username.charAt(0).toUpperCase() }}</div>
+                <div>
+                  <div class="user-name">{{ admin.username }}</div>
+                  <div *ngIf="admin.username === currentUsername" class="you-badge">You</div>
+                </div>
+              </div>
+            </td>
+            <td class="email-cell">{{ admin.email }}</td>
+            <td>
+              <span class="role-badge" [ngClass]="getRoleBadgeClass(admin.role)">
+                {{ getRoleLabel(admin.role) }}
+              </span>
+            </td>
+            <td class="date-cell">{{ formatDate(admin.createdAt) }}</td>
+            <td class="date-cell">{{ formatDate(admin.lastLogin) }}</td>
+            <td *ngIf="isSuperAdmin" class="actions-cell">
+              <button class="btn-icon btn-edit" (click)="openEditModal(admin)" [disabled]="admin.username === currentUsername && admin.role === 'SUPER_ADMIN'" title="Edit">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
+              <button class="btn-icon btn-delete" (click)="openDeleteModal(admin)" [disabled]="admin.username === currentUsername" title="Delete">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CREATE MODAL ==================== -->
+<div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Create Admin User</h3>
+      <button class="modal-close" (click)="closeCreateModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="createError" class="form-error-banner">{{ createError }}</div>
+      <div class="form-group">
+        <label for="create-username">Username</label>
+        <input id="create-username" type="text" [(ngModel)]="createForm.username" placeholder="e.g. john_doe" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="create-email">Email Address</label>
+        <input id="create-email" type="email" [(ngModel)]="createForm.email" placeholder="e.g. john@example.com" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="create-role">Role</label>
+        <select id="create-role" [(ngModel)]="createForm.role" class="form-input">
+          <option value="ADMIN">Admin</option>
+          <option value="SUPER_ADMIN">Super Admin</option>
+        </select>
+      </div>
+      <div class="form-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        A secure password will be automatically generated. You'll be able to copy it or email it to the user.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeCreateModal()">Cancel</button>
+      <button class="btn-submit" (click)="submitCreate()" [disabled]="isCreating">
+        <span *ngIf="isCreating" class="btn-spinner"></span>
+        {{ isCreating ? 'Creating...' : 'Create Admin' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CREDENTIALS MODAL ==================== -->
+<div class="modal-overlay" *ngIf="showCredentialsModal" (click)="closeCredentialsModal()">
+  <div class="modal credentials-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header success-header">
+      <div class="success-icon-wrapper">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h3>Admin Created Successfully!</h3>
+      <button class="modal-close" (click)="closeCredentialsModal()">×</button>
+    </div>
+    <div class="modal-body" *ngIf="newCredentials">
+      <p class="creds-intro">Save these credentials. The password <strong>cannot be recovered</strong> after closing this dialog.</p>
+      <div class="credentials-box">
+        <div class="cred-row">
+          <span class="cred-label">Username</span>
+          <span class="cred-value">{{ newCredentials.username }}</span>
+        </div>
+        <div class="cred-row">
+          <span class="cred-label">Email</span>
+          <span class="cred-value">{{ newCredentials.email }}</span>
+        </div>
+        <div class="cred-row">
+          <span class="cred-label">Password</span>
+          <span class="cred-value cred-password">{{ newCredentials.password }}</span>
+        </div>
+        <div class="cred-row">
+          <span class="cred-label">Role</span>
+          <span class="cred-value">
+            <span class="role-badge" [ngClass]="getRoleBadgeClass(newCredentials.role)">{{ getRoleLabel(newCredentials.role) }}</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="cred-actions">
+        <button class="btn-copy" (click)="copyCredentials()" [class.copied]="credentialsCopied">
+          <svg *ngIf="!credentialsCopied" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <svg *ngIf="credentialsCopied" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          {{ credentialsCopied ? 'Copied!' : 'Copy Credentials' }}
+        </button>
+
+        <button class="btn-email" (click)="sendCredentialsByEmail()" [disabled]="isSendingEmail || emailSent">
+          <span *ngIf="isSendingEmail" class="btn-spinner dark"></span>
+          <svg *ngIf="!isSendingEmail && !emailSent" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <svg *ngIf="emailSent" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          {{ isSendingEmail ? 'Sending...' : (emailSent ? 'Email Sent!' : 'Send via Email') }}
+        </button>
+      </div>
+
+      <div *ngIf="emailError" class="form-error-banner mt-sm">{{ emailError }}</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-submit" (click)="closeCredentialsModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EDIT MODAL ==================== -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Edit Admin User</h3>
+      <button class="modal-close" (click)="closeEditModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="editError" class="form-error-banner">{{ editError }}</div>
+      <div class="form-group">
+        <label for="edit-username">Username</label>
+        <input id="edit-username" type="text" [(ngModel)]="editForm.username" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="edit-email">Email Address</label>
+        <input id="edit-email" type="email" [(ngModel)]="editForm.email" class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="edit-role">Role</label>
+        <select id="edit-role" [(ngModel)]="editForm.role" class="form-input">
+          <option value="ADMIN">Admin</option>
+          <option value="SUPER_ADMIN">Super Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeEditModal()">Cancel</button>
+      <button class="btn-submit" (click)="submitEdit()" [disabled]="isEditing">
+        <span *ngIf="isEditing" class="btn-spinner"></span>
+        {{ isEditing ? 'Saving...' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== DELETE MODAL ==================== -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+  <div class="modal modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header danger-header">
+      <div class="danger-icon-wrapper">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+        </svg>
+      </div>
+      <h3>Delete Admin User</h3>
+      <button class="modal-close" (click)="closeDeleteModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="delete-confirm-text">
+        Are you sure you want to delete <strong>{{ adminToDelete?.username }}</strong>? This action cannot be undone.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeDeleteModal()">Cancel</button>
+      <button class="btn-danger" (click)="confirmDelete()" [disabled]="isDeleting">
+        <span *ngIf="isDeleting" class="btn-spinner"></span>
+        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TOAST ==================== -->
+<div class="toast" [class.show]="toast.show" [class.toast-error]="toast.type === 'error'">
+  <svg *ngIf="toast.type === 'success'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <svg *ngIf="toast.type === 'error'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="15" y1="9" x2="9" y2="15"></line>
+    <line x1="9" y1="9" x2="15" y2="15"></line>
+  </svg>
+  {{ toast.message }}
+</div>

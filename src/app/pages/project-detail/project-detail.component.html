@@ -29,7 +29,7 @@
   </div>
 </section>
 
-<section class="section">
+<section class="section mobile-detail-section">
   <div class="container">
     <div class="project-detail-grid">
       <!-- Project Info Sidebar -->
@@ -67,8 +67,14 @@
 
       <!-- Project Content & Images -->
       <div class="project-content">
-        <div class="main-image-container">
+        <div class="main-image-container" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+          @if (project && project.images.length > 1) {
+            <button class="nav-arrow prev-arrow" (click)="prevImage()">&#10094;</button>
+          }
           <img [src]="getImageAt(activeImageIndex)" [alt]="project.title" class="main-image">
+          @if (project && project.images.length > 1) {
+            <button class="nav-arrow next-arrow" (click)="nextImage()">&#10095;</button>
+          }
         </div>
         
         @if (project && project.images.length > 1) {

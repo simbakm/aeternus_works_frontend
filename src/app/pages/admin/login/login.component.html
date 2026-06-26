@@ -2,14 +2,18 @@
   <div class="login-card">
     <div class="login-header">
       <img src="logo.png" alt="Aeternus Works" class="login-logo">
-      <h2>Admin Dashboard</h2>
-      <p>Sign in to manage your website</p>
+      <h2 *ngIf="viewState === 'login'">Admin Dashboard</h2>
+      <h2 *ngIf="viewState === 'forgot'">Reset Password</h2>
+      <h2 *ngIf="viewState === 'reset'">Enter OTP & New Password</h2>
+      <p *ngIf="viewState === 'login'">Sign in to manage your website</p>
+      <p *ngIf="viewState === 'forgot'">Enter your username or email to receive an OTP.</p>
     </div>
 
-    <form (ngSubmit)="login()" #loginForm="ngForm" class="login-form">
+    <!-- Login Form -->
+    <form *ngIf="viewState === 'login'" (ngSubmit)="login()" #loginForm="ngForm" class="login-form">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" [(ngModel)]="username" required class="form-control" placeholder="Enter username">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" name="username" [(ngModel)]="username" required class="form-control" placeholder="Enter username or email">
       </div>
       
       <div class="form-group">
@@ -17,20 +21,70 @@
         <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control" placeholder="Enter password">
       </div>
 
-      @if (error) {
-        <div class="error-message">{{ error }}</div>
-      }
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+      <div *ngIf="success" class="success-message" style="color: #4caf50; text-align: center; margin-bottom: 1rem;">{{ success }}</div>
 
       <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.form.valid || isLoading">
-        @if (isLoading) {
-          Processing...
-        } @else {
-          Login
-        }
+        <span *ngIf="isLoading">Processing...</span>
+        <span *ngIf="!isLoading">Login</span>
       </button>
       
       <div class="text-center mt-2">
-        <a href="javascript:void(0)" (click)="resetPassword()" class="reset-link">Forgot Password?</a>
+        <a href="javascript:void(0)" (click)="showForgotPassword()" class="reset-link">Forgot Password?</a>
+      </div>
+    </form>
+
+    <!-- Forgot Password Form -->
+    <form *ngIf="viewState === 'forgot'" (ngSubmit)="requestOtp()" #forgotForm="ngForm" class="login-form">
+      <div class="form-group">
+        <label for="forgotUsername">Username or Email</label>
+        <input type="text" id="forgotUsername" name="forgotUsername" [(ngModel)]="username" required class="form-control" placeholder="Enter username or email">
+      </div>
+
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="!forgotForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Sending...</span>
+        <span *ngIf="!isLoading">Send OTP</span>
+      </button>
+      
+      <div class="text-center mt-2">
+        <a href="javascript:void(0)" (click)="showLogin()" class="reset-link">Back to Login</a>
+      </div>
+    </form>
+
+    <!-- Reset Password Form -->
+    <form *ngIf="viewState === 'reset'" (ngSubmit)="resetPassword()" #resetForm="ngForm" class="login-form">
+      <div class="form-group">
+        <label for="otp">OTP Code</label>
+        <input type="text" id="otp" name="otp" [(ngModel)]="otp" required class="form-control" placeholder="Enter 6-digit OTP">
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name="newPassword" [(ngModel)]="newPassword" required class="form-control" placeholder="Enter new password">
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required class="form-control" placeholder="Confirm new password">
+      </div>
+
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+      <div *ngIf="success" class="success-message" style="color: #4caf50; text-align: center; margin-bottom: 1rem;">{{ success }}</div>
+
+      <button type="submit" class="btn btn-primary btn-block mb-1" [disabled]="!resetForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Resetting...</span>
+        <span *ngIf="!isLoading">Reset Password</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary btn-block" (click)="requestOtp()" [disabled]="resendCountdown > 0 || isLoading">
+        <span *ngIf="resendCountdown > 0">Resend OTP in {{ formatTime(resendCountdown) }}</span>
+        <span *ngIf="resendCountdown === 0">Resend OTP</span>
+      </button>
+      
+      <div class="text-center mt-2">
+        <a href="javascript:void(0)" (click)="showLogin()" class="reset-link">Back to Login</a>
       </div>
     </form>
   </div>
