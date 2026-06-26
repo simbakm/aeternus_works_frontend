@@ -400,10 +400,6 @@
   .admin-header {
     padding: 1rem 1.5rem;
   }
-
-  .admin-wrapper {
-    min-height: auto;
-  }
 }
 
 @media (max-width: 768px) {
@@ -432,18 +428,12 @@
   }
 
   .admin-main {
-    min-height: auto;
     display: flex;
     flex-direction: column;
   }
 
   .admin-content {
-    flex: 0 1 auto;
     padding: 1.5rem 1rem;
-  }
-
-  .admin-wrapper {
-    min-height: auto;
   }
 }
 
